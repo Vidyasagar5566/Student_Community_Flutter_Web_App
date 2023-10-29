@@ -55,92 +55,100 @@ class _branchAndSemsState extends State<branchAndSems> {
   Widget build(BuildContext context) {
     List<String> domains_list_new = List.from(domains_list);
     domains_list_new.remove('All');
-    return Scaffold(
-        appBar: AppBar(
-          leading: const BackButton(
-            color: Colors.blue, // <-- SEE HERE
-          ),
-          centerTitle: false,
-          title: const Text(
-            "Branches",
-            style: TextStyle(color: Colors.black),
-          ),
-          actions: [
-            DropdownButton<String>(
-                value: widget.course,
-                underline: Container(),
-                elevation: 0,
-                items:
-                    course_list.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(
-                      value,
-                      style: TextStyle(fontSize: 10),
-                    ),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    widget.course = value!;
-                  });
-                }),
-            DropdownButton<String>(
-                value: widget.domain,
-                underline: Container(),
-                elevation: 0,
-                items: domains_list_new
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(
-                      value,
-                      style: TextStyle(fontSize: 10),
-                    ),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    widget.domain = value!;
-                  });
-                }),
-          ],
-          backgroundColor: Colors.white70,
-        ),
-        body: FutureBuilder<List<ALL_BRANCHES>>(
-          future: notes_servers()
-              .get_branches_list(domains1[widget.domain]!, widget.course),
-          builder: (ctx, AsyncSnapshot snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasError) {
-                return Center(
-                  child: Text(
-                    '${snapshot.error} occurred',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                );
-              } else if (snapshot.hasData) {
-                List<ALL_BRANCHES> all_branches = snapshot.data;
-                if (all_branches.isEmpty) {
-                  return Container(
-                      margin: EdgeInsets.all(30),
-                      padding: EdgeInsets.all(30),
-                      child: const Center(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 450.0,
+          child: Scaffold(
+              appBar: AppBar(
+                leading: const BackButton(
+                  color: Colors.blue, // <-- SEE HERE
+                ),
+                centerTitle: false,
+                title: const Text(
+                  "Branches",
+                  style: TextStyle(color: Colors.black),
+                ),
+                actions: [
+                  DropdownButton<String>(
+                      value: widget.course,
+                      underline: Container(),
+                      elevation: 0,
+                      items: course_list
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(
+                            value,
+                            style: TextStyle(fontSize: 10),
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          widget.course = value!;
+                        });
+                      }),
+                  DropdownButton<String>(
+                      value: widget.domain,
+                      underline: Container(),
+                      elevation: 0,
+                      items: domains_list_new
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(
+                            value,
+                            style: TextStyle(fontSize: 10),
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          widget.domain = value!;
+                        });
+                      }),
+                ],
+                backgroundColor: Colors.white70,
+              ),
+              body: FutureBuilder<List<ALL_BRANCHES>>(
+                future: notes_servers()
+                    .get_branches_list(domains1[widget.domain]!, widget.course),
+                builder: (ctx, AsyncSnapshot snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.hasError) {
+                      return Center(
                         child: Text(
-                          "No Data Was Found",
+                          '${snapshot.error} occurred',
+                          style: TextStyle(fontSize: 18),
                         ),
-                      ));
-                } else {
-                  return qn_an_branchs(all_branches, widget.app_user,
-                      widget.domain, widget.course);
-                }
-              }
-            }
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          },
-        ));
+                      );
+                    } else if (snapshot.hasData) {
+                      List<ALL_BRANCHES> all_branches = snapshot.data;
+                      if (all_branches.isEmpty) {
+                        return Container(
+                            margin: EdgeInsets.all(30),
+                            padding: EdgeInsets.all(30),
+                            child: const Center(
+                              child: Text(
+                                "No Data Was Found",
+                              ),
+                            ));
+                      } else {
+                        return qn_an_branchs(all_branches, widget.app_user,
+                            widget.domain, widget.course);
+                      }
+                    }
+                  }
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+              )),
+        ),
+      ],
+    );
   }
 }
 
@@ -202,7 +210,7 @@ class _branch_displayState extends State<branch_display> {
   @override
   Widget build(BuildContext context) {
     List<String> all_sems = widget.subject_names.semisters!.split('@');
-    var wid = MediaQuery.of(context).size.width;
+    var wid = 450.0;
     return Container(
         padding: EdgeInsets.only(top: 30),
         decoration: const BoxDecoration(
@@ -357,189 +365,204 @@ class _cal_subjectsState extends State<cal_subjects> {
       _extand.add(false);
       _loaded.add(false);
     }
-    var wid = MediaQuery.of(context).size.width;
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            //color: Colors.pink[100],
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage("images/background.jpg"),
-                  fit: BoxFit.cover),
-            ),
-            margin: const EdgeInsets.only(bottom: 20),
-            child: SingleChildScrollView(
-              child: Column(
-                  //mainAxisAlignment: MainAxisAlignment.center,
-                  //crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        ClipPath(
-                            clipper: profile_Clipper(),
-                            child: Container(
-                                height: 250,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                  colors: [
-                                    Colors.deepPurple,
-                                    Colors.purple.shade300
-                                  ],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                )))),
-                        Positioned(
-                            left: 25,
-                            top: 75,
-                            child: Row(
-                              children: [
-                                IconButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  icon: const Icon(
-                                    Icons.arrow_back_ios_new_outlined,
-                                    color: Colors.white,
-                                    size: 30,
-                                  ),
-                                ),
-                                const SizedBox(width: 20),
-                                SizedBox(
-                                  width: wid / 0.5,
-                                  child: Text(
-                                    widget.cal_year,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w700),
-                                  ),
-                                ),
-                              ],
-                            ))
-                      ],
-                    ),
-                    build_screen()
-                  ]),
-            )),
-      ),
-      floatingActionButton: ElevatedButton.icon(
-        onPressed: () {
-          showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (context) {
-                return AlertDialog(
-                    contentPadding: EdgeInsets.all(15),
-                    content: Column(mainAxisSize: MainAxisSize.min, children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    var wid = 450.0;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 450.0,
+          child: Scaffold(
+            body: SingleChildScrollView(
+              child: Container(
+                  width: 450.0,
+                  height: MediaQuery.of(context).size.height,
+                  //color: Colors.pink[100],
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage("images/background.jpg"),
+                        fit: BoxFit.cover),
+                  ),
+                  margin: const EdgeInsets.only(bottom: 20),
+                  child: SingleChildScrollView(
+                    child: Column(
+                        //mainAxisAlignment: MainAxisAlignment.center,
+                        //crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Container(),
-                          IconButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              icon: const Icon(Icons.close))
-                        ],
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(left: 40, right: 40),
-                        child: TextField(
-                          keyboardType: TextInputType.emailAddress,
-                          decoration: const InputDecoration(
-                              labelText: "sub_name",
-                              hintText: 'MATHS-II',
-                              prefixIcon: Icon(Icons.text_fields),
-                              border: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)))),
-                          onChanged: (String value) {
-                            setState(() {
-                              sub_name = value;
-                              if (value == "") {
-                                sub_name = null;
-                              }
-                            });
-                          },
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      TextButton(
-                          onPressed: () async {
-                            if (!widget.app_user.isStudentAdmin!) {
-                              Navigator.pop(context);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  duration: Duration(milliseconds: 400),
-                                  content: Text(
-                                    "Students are not allowed",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                              );
-                            } else {
-                              if (sub_name == null) {
-                                Navigator.pop(context);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    duration: Duration(milliseconds: 400),
-                                    content: Text(
-                                      "sub name cant be null",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                );
-                              } else {
-                                Navigator.pop(context);
-
-                                List<dynamic> error = await notes_servers()
-                                    .post_cal_sub(sub_name, widget.sub_ids);
-                                if (!error[0]) {
-                                  var new_sub_name = CAL_SUB_NAMES();
-                                  new_sub_name.id = error[1];
-                                  new_sub_name.subId = widget.sub_ids;
-                                  new_sub_name.subName = sub_name;
-                                  new_sub_name.username =
-                                      user_min(widget.app_user);
-                                  new_sub_name.totRatingsVal = 0;
-                                  new_sub_name.numRatings = 0;
+                          Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              ClipPath(
+                                  clipper: profile_Clipper(),
+                                  child: Container(
+                                      height: 250,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                        colors: [
+                                          Colors.deepPurple,
+                                          Colors.purple.shade300
+                                        ],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                      )))),
+                              Positioned(
+                                  left: 25,
+                                  top: 75,
+                                  child: Row(
+                                    children: [
+                                      IconButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        icon: const Icon(
+                                          Icons.arrow_back_ios_new_outlined,
+                                          color: Colors.white,
+                                          size: 30,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 20),
+                                      SizedBox(
+                                        width: wid / 0.5,
+                                        child: Text(
+                                          widget.cal_year,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                      ),
+                                    ],
+                                  ))
+                            ],
+                          ),
+                          build_screen()
+                        ]),
+                  )),
+            ),
+            floatingActionButton: ElevatedButton.icon(
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) {
+                      return AlertDialog(
+                          contentPadding: EdgeInsets.all(15),
+                          content:
+                              Column(mainAxisSize: MainAxisSize.min, children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(),
+                                IconButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    icon: const Icon(Icons.close))
+                              ],
+                            ),
+                            Container(
+                              padding: EdgeInsets.only(left: 40, right: 40),
+                              child: TextField(
+                                keyboardType: TextInputType.emailAddress,
+                                decoration: const InputDecoration(
+                                    labelText: "sub_name",
+                                    hintText: 'MATHS-II',
+                                    prefixIcon: Icon(Icons.text_fields),
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10)))),
+                                onChanged: (String value) {
                                   setState(() {
-                                    subject_names.add(new_sub_name);
-                                    widget.subject_names.add(new_sub_name);
+                                    sub_name = value;
+                                    if (value == "") {
+                                      sub_name = null;
+                                    }
                                   });
-                                } else {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(const SnackBar(
+                                },
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            TextButton(
+                                onPressed: () async {
+                                  if (!widget.app_user.isStudentAdmin!) {
+                                    Navigator.pop(context);
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        duration: Duration(milliseconds: 400),
+                                        content: Text(
+                                          "Students are not allowed",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    );
+                                  } else {
+                                    if (sub_name == null) {
+                                      Navigator.pop(context);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
                                           duration: Duration(milliseconds: 400),
                                           content: Text(
-                                            "error occured please try again",
+                                            "sub name cant be null",
                                             style:
                                                 TextStyle(color: Colors.white),
-                                          )));
-                                }
-                              }
-                            }
-                          },
-                          child: const Center(child: Text("Add")))
-                    ]));
-              });
-        },
-        label: const Text("Add new subject",
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-        icon: const Icon(Icons.edit, color: Colors.white),
-        style: ElevatedButton.styleFrom(primary: Colors.deepPurple),
-      ),
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      Navigator.pop(context);
+
+                                      List<dynamic> error =
+                                          await notes_servers().post_cal_sub(
+                                              sub_name, widget.sub_ids);
+                                      if (!error[0]) {
+                                        var new_sub_name = CAL_SUB_NAMES();
+                                        new_sub_name.id = error[1];
+                                        new_sub_name.subId = widget.sub_ids;
+                                        new_sub_name.subName = sub_name;
+                                        new_sub_name.username =
+                                            user_min(widget.app_user);
+                                        new_sub_name.totRatingsVal = 0;
+                                        new_sub_name.numRatings = 0;
+                                        setState(() {
+                                          subject_names.add(new_sub_name);
+                                          widget.subject_names
+                                              .add(new_sub_name);
+                                        });
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                                duration:
+                                                    Duration(milliseconds: 400),
+                                                content: Text(
+                                                  "error occured please try again",
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                )));
+                                      }
+                                    }
+                                  }
+                                },
+                                child: const Center(child: Text("Add")))
+                          ]));
+                    });
+              },
+              label: const Text("Add new subject",
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold)),
+              icon: const Icon(Icons.edit, color: Colors.white),
+              style: ElevatedButton.styleFrom(primary: Colors.deepPurple),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
   build_screen() {
-    var wid = MediaQuery.of(context).size.width;
+    var wid = 450.0;
     return !loaded_data
         ? const CircularProgressIndicator()
         : subject_names.isEmpty

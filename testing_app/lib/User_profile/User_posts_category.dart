@@ -142,7 +142,7 @@ class _single_postState extends State<single_post> {
   Widget build(BuildContext context) {
     POST_LIST post = widget.post;
     SmallUsername user = post.username!;
-    var width = MediaQuery.of(context).size.width;
+    var width = 450.0;
     return Container(
       margin: EdgeInsets.only(top: 10),
       padding: const EdgeInsets.only(top: 20, bottom: 20, left: 5, right: 5),
@@ -162,62 +162,10 @@ class _single_postState extends State<single_post> {
             children: [
               Row(
                 children: [
-                  Container(
-                    width: 48, //post.profile_pic
-                    child: user.fileType == '1'
-                        ? CircleAvatar(
-                            backgroundImage: NetworkImage(user.profilePic!))
-                        : const CircleAvatar(
-                            backgroundImage: AssetImage("images/profile.jpg")),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(left: 20),
-                    width: (width - 36) / 1.8,
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                constraints: BoxConstraints(
-                                    maxWidth: (width - 36) / 2.4),
-                                child: Text(
-                                  user.username!,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  //"Vidya Sagar",
-                                  //lst_list[index].username,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 16,
-                                    //color: Colors.white
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              9 % 9 == 0
-                                  ? const Icon(
-                                      Icons
-                                          .verified_rounded, //verified_rounded,verified_outlined
-                                      color: Colors.green,
-                                      size: 18,
-                                    )
-                                  : Container()
-                            ],
-                          ),
-                          Text(
-                            //"B190838EC",
-                            domains[user.domain!]! +
-                                " (" +
-                                user.userMark! +
-                                ")",
-                            overflow: TextOverflow.ellipsis,
-                            //lst_list.username.rollNum,
-                            //style: const TextStyle(color: Colors.white),
-                            maxLines: 1,
-                          )
-                        ]),
-                  )
+                  post.category == 'student'
+                      ? UserProfileMark(widget.app_user, post.username!)
+                      : UserProfileMarkAdmin(
+                          post, post.username, widget.app_user),
                 ],
               ),
               IconButton(

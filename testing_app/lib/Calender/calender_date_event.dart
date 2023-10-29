@@ -37,371 +37,408 @@ class _calender_events_displayState extends State<calender_events_display> {
   List<bool> _extand = [];
   @override
   Widget build(BuildContext context) {
-    var wid = MediaQuery.of(context).size.width;
+    var wid = 450.0;
     for (int i = 0; i < widget.cal_event_data.length; i++) {
       _extand.add(false);
     }
-    return Scaffold(
-        body: index == 0
-            ? SingleChildScrollView(
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height + 100,
-                  decoration: const BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage("images/background.jpg"),
-                          fit: BoxFit.cover)),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            ClipPath(
-                                clipper: profile_Clipper(),
-                                child: Container(
-                                  height: 250,
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                    colors: [
-                                      Colors.deepPurple,
-                                      Colors.purple.shade300
-                                    ],
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                  )),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      const SizedBox(height: 80),
-                                      SizedBox(
-                                        width: wid / 2,
-                                        child: Text(
-                                          widget.date + " Tasks",
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 25,
-                                              fontWeight: FontWeight.w700),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 450.0,
+          child: Scaffold(
+              body: index == 0
+                  ? SingleChildScrollView(
+                      child: Container(
+                        width: 450.0,
+                        height: MediaQuery.of(context).size.height + 100,
+                        decoration: const BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage("images/background.jpg"),
+                                fit: BoxFit.cover)),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  ClipPath(
+                                      clipper: profile_Clipper(),
+                                      child: Container(
+                                        height: 250,
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                            gradient: LinearGradient(
+                                          colors: [
+                                            Colors.deepPurple,
+                                            Colors.purple.shade300
+                                          ],
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                        )),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            const SizedBox(height: 80),
+                                            SizedBox(
+                                              width: wid / 2,
+                                              child: Text(
+                                                widget.date + " Tasks",
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 25,
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )),
+                                  Positioned(
+                                      left: 25,
+                                      top: 75,
+                                      child: IconButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        icon: const Icon(
+                                          Icons.arrow_back_ios_new_outlined,
+                                          color: Colors.white,
+                                          size: 30,
+                                        ),
+                                      ))
+                                ],
+                              ),
+                              widget.cal_event_data.isEmpty
+                                  ? Container(
+                                      child: Center(
+                                        child: Container(
+                                          margin: const EdgeInsets.all(20),
+                                          padding: const EdgeInsets.all(20),
+                                          child: const Text("No Tasks Today",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 24)),
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                )),
-                            Positioned(
-                                left: 25,
-                                top: 75,
-                                child: IconButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  icon: const Icon(
-                                    Icons.arrow_back_ios_new_outlined,
-                                    color: Colors.white,
-                                    size: 30,
-                                  ),
-                                ))
-                          ],
+                                    )
+                                  : SingleChildScrollView(
+                                      child: ListView.builder(
+                                          itemCount:
+                                              widget.cal_event_data.length,
+                                          shrinkWrap: true,
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          padding: EdgeInsets.only(bottom: 10),
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            CALENDER_EVENT cal_event =
+                                                widget.cal_event_data[index];
+                                            return _buildLoadingScreen(
+                                                cal_event,
+                                                widget.cal_event_data,
+                                                index);
+                                          }),
+                                    )
+                            ],
+                          ),
                         ),
-                        widget.cal_event_data.isEmpty
-                            ? Container(
-                                child: Center(
-                                  child: Container(
-                                    margin: const EdgeInsets.all(20),
-                                    padding: const EdgeInsets.all(20),
-                                    child: const Text("No Tasks Today",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 24)),
-                                  ),
-                                ),
-                              )
-                            : SingleChildScrollView(
-                                child: ListView.builder(
-                                    itemCount: widget.cal_event_data.length,
-                                    shrinkWrap: true,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    padding: EdgeInsets.only(bottom: 10),
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      CALENDER_EVENT cal_event =
-                                          widget.cal_event_data[index];
-                                      return _buildLoadingScreen(cal_event,
-                                          widget.cal_event_data, index);
-                                    }),
-                              )
-                      ],
-                    ),
-                  ),
-                ),
-              )
-            : Container(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(top: 30),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      ),
+                    )
+                  : Container(
+                      child: SingleChildScrollView(
+                        child: Column(
                           children: [
-                            IconButton(
-                                onPressed: () {
-                                  Navigator.of(context);
-                                  Navigator.pop(context);
-                                },
-                                icon: const Icon(Icons.keyboard_arrow_left,
-                                    color: Colors.blue, size: 40)),
-                            Container()
+                            Container(
+                              margin: EdgeInsets.only(top: 30),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  IconButton(
+                                      onPressed: () {
+                                        Navigator.of(context);
+                                        Navigator.pop(context);
+                                      },
+                                      icon: const Icon(
+                                          Icons.keyboard_arrow_left,
+                                          color: Colors.blue,
+                                          size: 40)),
+                                  Container()
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            activitieswidget1(widget.activity_data,
+                                widget.app_user, widget.app_user.domain!, true)
                           ],
                         ),
                       ),
-                      const SizedBox(height: 10),
-                      activitieswidget1(widget.activity_data, widget.app_user,
-                          widget.app_user.domain!, true)
-                    ],
-                  ),
-                ),
+                    ),
+              bottomNavigationBar: BottomNavigationBar(
+                fixedColor: Colors.blue,
+                backgroundColor: Colors.white70,
+                type: BottomNavigationBarType.fixed,
+                items: const [
+                  BottomNavigationBarItem(
+                      label: "events",
+                      icon: Icon(
+                        Icons.event_sharp,
+                      )),
+                  BottomNavigationBarItem(
+                      label: "activities",
+                      icon: Icon(
+                        Icons.local_activity_outlined,
+                      )),
+                ],
+                currentIndex: index,
+                onTap: (int index1) {
+                  setState(() {
+                    index = index1;
+                  });
+                },
               ),
-        bottomNavigationBar: BottomNavigationBar(
-          fixedColor: Colors.blue,
-          backgroundColor: Colors.white70,
-          type: BottomNavigationBarType.fixed,
-          items: const [
-            BottomNavigationBarItem(
-                label: "events",
-                icon: Icon(
-                  Icons.event_sharp,
-                )),
-            BottomNavigationBarItem(
-                label: "activities",
-                icon: Icon(
-                  Icons.local_activity_outlined,
-                )),
-          ],
-          currentIndex: index,
-          onTap: (int index1) {
-            setState(() {
-              index = index1;
-            });
-          },
-        ),
-        floatingActionButton: index == 1
-            ? Container()
-            : ElevatedButton.icon(
-                onPressed: () {
-                  String formattedTime = "12:00";
-                  TextEditingController timeinput = TextEditingController();
-                  timeinput.text = "12:00:00";
-                  showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (context) {
-                        return AlertDialog(
-                            contentPadding: EdgeInsets.all(15),
-                            content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(),
-                                      IconButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          icon: const Icon(Icons.close))
-                                    ],
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.only(
-                                        left: 40, right: 40),
-                                    child: TextField(
-                                      keyboardType: TextInputType.emailAddress,
-                                      decoration: const InputDecoration(
-                                          labelText: 'title',
-                                          hintText: 'Maths Assignment',
-                                          prefixIcon: Icon(Icons.text_fields),
-                                          border: OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(10)))),
-                                      onChanged: (String value) {
-                                        setState(() {
-                                          title = value;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Container(
-                                    padding: const EdgeInsets.only(
-                                        left: 40, right: 40),
-                                    child: TextField(
-                                      keyboardType: TextInputType.multiline,
-                                      minLines:
-                                          4, //Normal textInputField will be displayed
-                                      maxLines: 10,
-                                      decoration: const InputDecoration(
-                                          labelText: 'Description',
-                                          hintText:
-                                              'i have to complete it by today n8....',
-                                          prefixIcon: Icon(Icons.text_fields),
-                                          border: OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(10)))),
-                                      onChanged: (String value) {
-                                        setState(() {
-                                          description = value;
-                                          if (description == "") {
-                                            description = null;
-                                          }
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Container(
-                                      padding: const EdgeInsets.only(
-                                          left: 40, right: 40),
-                                      child: TextField(
-                                        //                                 initialValue: "12:00:00",
-                                        controller:
-                                            timeinput, //editing controller of this TextField
-                                        decoration: const InputDecoration(
-                                            labelText: "Enter Time",
-                                            border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(
-                                                        10))) //label text of field
-                                            ),
-                                        readOnly:
-                                            true, //set it true, so that user will not able to edit text
-                                        onTap: () async {
-                                          TimeOfDay? pickedTime =
-                                              await showTimePicker(
-                                            initialTime: TimeOfDay.now(),
-                                            context: context,
-                                          );
-                                          formattedTime =
-                                              pickedTime!.hour.toString() +
-                                                  ":" +
-                                                  pickedTime.minute.toString() +
-                                                  ':00';
-                                          setState(() {
-                                            timeinput.text = formattedTime;
-                                          });
-                                        },
-                                      )),
-                                  const SizedBox(height: 10),
-                                  TextButton(
-                                      onPressed: () async {
-                                        if (widget.app_user.email ==
-                                            "guest@nitc.ac.in") {
-                                          Navigator.pop(context);
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                              duration:
-                                                  Duration(milliseconds: 400),
-                                              content: Text(
-                                                "Guests are not allowed",
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              ),
-                                            ),
-                                          );
-                                        } else {
-                                          if (title == null ||
-                                              description == null) {
-                                            Navigator.pop(context);
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              const SnackBar(
-                                                duration:
-                                                    Duration(milliseconds: 400),
-                                                content: Text(
-                                                  "title or description cant be null",
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                ),
-                                              ),
-                                            );
-                                          } else {
-                                            Navigator.pop(context);
-                                            CALENDER_EVENT a = CALENDER_EVENT();
-                                            a.username =
-                                                user_min(widget.app_user);
-                                            a.title = title;
-                                            a.description = description;
-                                            a.insertMessage = true;
-                                            a.messageSent = false;
-                                            a.fileType = '0';
-                                            a.eventDate = widget.date +
-                                                'T' +
-                                                formattedTime;
-
-                                            File temp_image =
-                                                File('images/profile.jpg');
-                                            List<dynamic> error =
-                                                await calendar_servers()
-                                                    .post_calender_event(
-                                                        "self",
-                                                        title,
-                                                        description,
-                                                        temp_image,
-                                                        '0',
-                                                        '0000',
-                                                        '@',
-                                                        widget.date +
-                                                            'T' +
-                                                            formattedTime);
-                                            setState(() {
-                                              if (!error[0]) {
-                                                widget.cal_event_data.add(a);
-                                                all_dates.add(widget.date +
-                                                    ' ' +
-                                                    formattedTime +
-                                                    '&&' +
-                                                    title);
-                                                a.id = error[1];
-                                                a.messageSent = true;
-                                              } else {
+              floatingActionButton: index == 1
+                  ? Container()
+                  : ElevatedButton.icon(
+                      onPressed: () {
+                        String formattedTime = "12:00";
+                        TextEditingController timeinput =
+                            TextEditingController();
+                        timeinput.text = "12:00:00";
+                        showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (context) {
+                              return AlertDialog(
+                                  contentPadding: EdgeInsets.all(15),
+                                  content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Container(),
+                                            IconButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                icon: const Icon(Icons.close))
+                                          ],
+                                        ),
+                                        Container(
+                                          padding: const EdgeInsets.only(
+                                              left: 40, right: 40),
+                                          child: TextField(
+                                            keyboardType:
+                                                TextInputType.emailAddress,
+                                            decoration: const InputDecoration(
+                                                labelText: 'title',
+                                                hintText: 'Maths Assignment',
+                                                prefixIcon:
+                                                    Icon(Icons.text_fields),
+                                                border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                10)))),
+                                            onChanged: (String value) {
+                                              setState(() {
+                                                title = value;
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Container(
+                                          padding: const EdgeInsets.only(
+                                              left: 40, right: 40),
+                                          child: TextField(
+                                            keyboardType:
+                                                TextInputType.multiline,
+                                            minLines:
+                                                4, //Normal textInputField will be displayed
+                                            maxLines: 10,
+                                            decoration: const InputDecoration(
+                                                labelText: 'Description',
+                                                hintText:
+                                                    'i have to complete it by today n8....',
+                                                prefixIcon:
+                                                    Icon(Icons.text_fields),
+                                                border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                10)))),
+                                            onChanged: (String value) {
+                                              setState(() {
+                                                description = value;
+                                                if (description == "") {
+                                                  description = null;
+                                                }
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Container(
+                                            padding: const EdgeInsets.only(
+                                                left: 40, right: 40),
+                                            child: TextField(
+                                              //                                 initialValue: "12:00:00",
+                                              controller:
+                                                  timeinput, //editing controller of this TextField
+                                              decoration: const InputDecoration(
+                                                  labelText: "Enter Time",
+                                                  border: OutlineInputBorder(
+                                                      borderRadius: BorderRadius
+                                                          .all(Radius.circular(
+                                                              10))) //label text of field
+                                                  ),
+                                              readOnly:
+                                                  true, //set it true, so that user will not able to edit text
+                                              onTap: () async {
+                                                TimeOfDay? pickedTime =
+                                                    await showTimePicker(
+                                                  initialTime: TimeOfDay.now(),
+                                                  context: context,
+                                                );
+                                                formattedTime = pickedTime!.hour
+                                                        .toString() +
+                                                    ":" +
+                                                    pickedTime.minute
+                                                        .toString() +
+                                                    ':00';
+                                                setState(() {
+                                                  timeinput.text =
+                                                      formattedTime;
+                                                });
+                                              },
+                                            )),
+                                        const SizedBox(height: 10),
+                                        TextButton(
+                                            onPressed: () async {
+                                              if (widget.app_user.email ==
+                                                  "guest@nitc.ac.in") {
+                                                Navigator.pop(context);
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(
                                                   const SnackBar(
                                                     duration: Duration(
                                                         milliseconds: 400),
                                                     content: Text(
-                                                      "error occured try again",
+                                                      "Guests are not allowed",
                                                       style: TextStyle(
                                                           color: Colors.white),
                                                     ),
                                                   ),
                                                 );
+                                              } else {
+                                                if (title == null ||
+                                                    description == null) {
+                                                  Navigator.pop(context);
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    const SnackBar(
+                                                      duration: Duration(
+                                                          milliseconds: 400),
+                                                      content: Text(
+                                                        "title or description cant be null",
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                    ),
+                                                  );
+                                                } else {
+                                                  Navigator.pop(context);
+                                                  CALENDER_EVENT a =
+                                                      CALENDER_EVENT();
+                                                  a.username =
+                                                      user_min(widget.app_user);
+                                                  a.title = title;
+                                                  a.description = description;
+                                                  a.insertMessage = true;
+                                                  a.messageSent = false;
+                                                  a.fileType = '0';
+                                                  a.eventDate = widget.date +
+                                                      'T' +
+                                                      formattedTime;
+
+                                                  File temp_image = File(
+                                                      'images/profile.jpg');
+                                                  List<dynamic> error =
+                                                      await calendar_servers()
+                                                          .post_calender_event(
+                                                              "self",
+                                                              title,
+                                                              description,
+                                                              temp_image,
+                                                              '0',
+                                                              '0000',
+                                                              '@',
+                                                              widget.date +
+                                                                  'T' +
+                                                                  formattedTime);
+                                                  setState(() {
+                                                    if (!error[0]) {
+                                                      widget.cal_event_data
+                                                          .add(a);
+                                                      all_dates.add(
+                                                          widget.date +
+                                                              ' ' +
+                                                              formattedTime +
+                                                              '&&' +
+                                                              title);
+                                                      a.id = error[1];
+                                                      a.messageSent = true;
+                                                    } else {
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                        const SnackBar(
+                                                          duration: Duration(
+                                                              milliseconds:
+                                                                  400),
+                                                          content: Text(
+                                                            "error occured try again",
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    }
+                                                  });
+                                                }
                                               }
-                                            });
-                                          }
-                                        }
-                                      },
-                                      child: const Center(
-                                        child: Text("Add"),
-                                      ))
-                                ]));
-                      });
-                },
-                label: const Text("Add new Task",
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold)),
-                icon: const Icon(Icons.edit, color: Colors.white),
-                style: ElevatedButton.styleFrom(primary: Colors.deepPurple),
-              ));
+                                            },
+                                            child: const Center(
+                                              child: Text("Add"),
+                                            ))
+                                      ]));
+                            });
+                      },
+                      label: const Text("Add new Task",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold)),
+                      icon: const Icon(Icons.edit, color: Colors.white),
+                      style:
+                          ElevatedButton.styleFrom(primary: Colors.deepPurple),
+                    )),
+        ),
+      ],
+    );
   }
 
   Widget _buildLoadingScreen(CALENDER_EVENT cal_event,
       List<CALENDER_EVENT> cal_event_data, int index) {
-    var wid = MediaQuery.of(context).size.width;
+    var wid = 450.0;
     var hig = MediaQuery.of(context).size.height;
     return Container(
         margin: const EdgeInsets.only(top: 30, left: 20, right: 20),

@@ -69,394 +69,464 @@ class _clubpagewidgetState extends State<clubpagewidget> {
   Widget build(BuildContext context) {
     final double coverheight = 100;
     final double profileheight = 50;
-    var width = MediaQuery.of(context).size.width;
-    return DefaultTabController(
-        length: 3,
-        child: Scaffold(
-          appBar: AppBar(
-            leading: const BackButton(
-              color: Colors.blue, // <-- SEE HERE
-            ),
-            centerTitle: true,
-            title: Text(
-              widget.club.head!.username!,
-              style: TextStyle(color: Colors.black),
-            ),
-            backgroundColor: Colors.white70,
-          ),
-          body: Container(
-            color: Colors.indigo,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Stack(
-                  clipBehavior: Clip.none,
-                  alignment: Alignment.center,
-                  children: [
-                    Container(
-                        margin: EdgeInsets.only(
-                            bottom: profileheight / 2,
-                            left: 4,
-                            right: 4,
-                            top: 4),
-                        child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: Image.asset(
-                              "images/Clubs.jpg",
-                              width: double.infinity,
-                              height: coverheight,
-                              fit: BoxFit.cover,
-                            ))),
-                    Positioned(
-                      top: coverheight - profileheight / 2,
-                      child: CircleAvatar(
-                          radius: 2 + profileheight / 2,
-                          backgroundColor: Colors.grey[700],
-                          child: CircleAvatar(
-                            radius: profileheight / 2,
-                            backgroundColor: Colors.grey,
-                            backgroundImage: NetworkImage(widget.club.logo!
-                                //"images/club-clun-profile.png"
-                                ),
-                          )),
-                    ),
-                  ],
+    var width = 450.0;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 450,
+          child: DefaultTabController(
+              length: 3,
+              child: Scaffold(
+                appBar: AppBar(
+                  leading: const BackButton(
+                    color: Colors.blue, // <-- SEE HERE
+                  ),
+                  centerTitle: true,
+                  title: Text(
+                    widget.club.head!.username!,
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  backgroundColor: Colors.white70,
                 ),
-                const SizedBox(
-                  height: 4,
-                ),
-                Text(
-                  widget.club.name!,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w600, color: Colors.white),
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                SizedBox(
-                    height: 50,
-                    child: AppBar(
-                        backgroundColor: Colors.white,
-                        bottom: TabBar(
-                          unselectedLabelColor: Colors.blueAccent,
-                          indicatorSize: TabBarIndicatorSize.label,
-                          indicator: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Colors.blueAccent),
-                          tabs: tabs,
-                        ))),
-                Expanded(
-                    child: TabBarView(children: [
-                  //  Tab Bar View  Tab contents
-
-                  SingleChildScrollView(
-                      child: Container(
-                    margin: EdgeInsets.all(20),
-                    padding: EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.grey, // Shadow color
-                            offset: Offset(0,
-                                2), // Offset of the shadow (horizontal, vertical)
-                            blurRadius: 6, // Spread of the shadow
-                            spreadRadius: 0, // Expansion of the shadow
-                          ),
-                        ],
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Column(
-                      children: [
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        //Link
-                        Text(
-                          utf8convert(widget.club.description!),
-                        ),
-                      ],
-                    ),
-                  )),
-                  SingleChildScrollView(
-                      child: Container(
-                    margin: EdgeInsets.only(top: 20),
-                    child:
-                        club_members(widget.app_user, widget.club.teamMembers!),
-                  )),
-                  SingleChildScrollView(
-                    child: Container(
-                      width: width,
-                      height: width * 1.2,
-                      padding: EdgeInsets.all(40),
-                      margin: EdgeInsets.only(top: 20, bottom: 40),
-                      decoration: const BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey, // Shadow color
-                              offset: Offset(0,
-                                  2), // Offset of the shadow (horizontal, vertical)
-                              blurRadius: 6, // Spread of the shadow
-                              spreadRadius: 0, // Expansion of the shadow
-                            ),
-                          ],
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(30),
-                          )),
-                      child: Column(
+                body: Container(
+                  color: Colors.indigo,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Stack(
+                        clipBehavior: Clip.none,
+                        alignment: Alignment.center,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (BuildContext context) {
-                                    return Scaffold(
-                                        appBar: AppBar(
-                                          centerTitle: true,
-                                          iconTheme: const IconThemeData(
-                                              color: Colors.white),
-                                          title: Text(widget.club.name!,
-                                              style: const TextStyle(
-                                                  color: Colors.white)),
-                                          backgroundColor:
-                                              Colors.indigoAccent[700],
-                                        ),
-                                        body: SingleChildScrollView(
-                                          child: user_postswidget(
-                                              '',
-                                              widget.app_user,
-                                              'club',
-                                              widget.club.id!),
-                                        ));
-                                  }));
-                                },
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                        "Posts (" +
-                                            widget.club.post_count.toString() +
-                                            ')',
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
-                                            fontSize: 18)),
-                                    const SizedBox(height: 12),
-                                    Container(
-                                      height: width / 3,
-                                      width: width / 3,
-                                      decoration: const BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20)),
-                                          image: DecorationImage(
-                                              image: AssetImage(
-                                                  "images/posts.jpeg"),
-                                              fit: BoxFit.cover)),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () async {
-                                  showDialog(
-                                      context: context,
-                                      barrierDismissible: false,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                            contentPadding: EdgeInsets.all(15),
-                                            content: Container(
-                                              margin: EdgeInsets.all(10),
-                                              child: const Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    Text(
-                                                        "Please wait a min....."),
-                                                    SizedBox(height: 10),
-                                                    CircularProgressIndicator()
-                                                  ]),
-                                            ));
-                                      });
-                                  var event_list = await user_profile_servers()
-                                      .get_user_activity_list(
-                                          '', 'club', widget.club.id!);
-                                  Navigator.pop(context);
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (BuildContext context) {
-                                    return Scaffold(
-                                        appBar: AppBar(
-                                          centerTitle: true,
-                                          iconTheme: const IconThemeData(
-                                              color: Colors.white),
-                                          title: Text(widget.club.name!,
-                                              style: const TextStyle(
-                                                  color: Colors.white)),
-                                          backgroundColor:
-                                              Colors.indigoAccent[700],
-                                        ),
-                                        body: SingleChildScrollView(
-                                            child: activitieswidget1(
-                                                event_list,
-                                                widget.app_user,
-                                                widget.app_user.domain!,
-                                                true)));
-                                  }));
-                                },
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                        "Activities (" +
-                                            widget.club.activity_count
-                                                .toString() +
-                                            ')',
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
-                                            fontSize: 18)),
-                                    const SizedBox(height: 12),
-                                    Container(
-                                      height: width / 3,
-                                      width: width / 3,
-                                      decoration: const BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20)),
-                                          image: DecorationImage(
-                                              image: AssetImage(
-                                                  "images/profile_activities.jpeg"),
-                                              fit: BoxFit.cover)),
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                          const SizedBox(height: 40),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              GestureDetector(
-                                onTap: () async {
-                                  String web_url = widget.club.websites!;
-
-                                  final Uri url = Uri.parse(web_url);
-                                  if (!await launchUrl(url)) {
-                                    throw Exception('Could not launch $url');
-                                  }
-                                },
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(widget.club.name!,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
-                                            fontSize: 18)),
-                                    const SizedBox(height: 12),
-                                    Container(
-                                      height: width / 3,
-                                      width: width / 3,
-                                      decoration: BoxDecoration(
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(20)),
-                                          image: DecorationImage(
-                                              image: NetworkImage(
-                                                  widget.club.logo!),
-                                              fit: BoxFit.cover)),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () async {
-                                  showDialog(
-                                      context: context,
-                                      barrierDismissible: false,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                            contentPadding: EdgeInsets.all(15),
-                                            content: Container(
-                                              margin: EdgeInsets.all(10),
-                                              child: const Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    Text(
-                                                        "Please wait a min....."),
-                                                    SizedBox(height: 10),
-                                                    CircularProgressIndicator()
-                                                  ]),
-                                            ));
-                                      });
-                                  var thread_list = await user_profile_servers()
-                                      .get_user_thread_list(
-                                          '', 'club', widget.club.id!);
-                                  Navigator.pop(context);
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (BuildContext context) {
-                                    return Scaffold(
-                                        appBar: AppBar(
-                                          centerTitle: true,
-                                          iconTheme: const IconThemeData(
-                                              color: Colors.white),
-                                          title: Text(widget.club.name!,
-                                              style: const TextStyle(
-                                                  color: Colors.white)),
-                                          backgroundColor:
-                                              Colors.indigoAccent[700],
-                                        ),
-                                        body: SingleChildScrollView(
-                                          child: alertwidget1(
-                                              thread_list,
-                                              widget.app_user,
-                                              widget.app_user.domain!,
-                                              true),
-                                        ));
-                                  }));
-                                },
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                        "Threads (" +
-                                            widget.club.thread_count
-                                                .toString() +
-                                            ')',
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
-                                            fontSize: 18)),
-                                    const SizedBox(height: 12),
-                                    Container(
-                                      height: width / 3,
-                                      width: width / 3,
-                                      decoration: const BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20)),
-                                          image: DecorationImage(
-                                              image: AssetImage(
-                                                  "images/threads profile.jpeg"),
-                                              fit: BoxFit.cover)),
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
+                          Container(
+                              margin: EdgeInsets.only(
+                                  bottom: profileheight / 2,
+                                  left: 4,
+                                  right: 4,
+                                  top: 4),
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Image.asset(
+                                    "images/Clubs.jpg",
+                                    width: double.infinity,
+                                    height: coverheight,
+                                    fit: BoxFit.cover,
+                                  ))),
+                          Positioned(
+                            top: coverheight - profileheight / 2,
+                            child: CircleAvatar(
+                                radius: 2 + profileheight / 2,
+                                backgroundColor: Colors.grey[700],
+                                child: CircleAvatar(
+                                  radius: profileheight / 2,
+                                  backgroundColor: Colors.grey,
+                                  backgroundImage:
+                                      NetworkImage(widget.club.logo!
+                                          //"images/club-clun-profile.png"
+                                          ),
+                                )),
                           ),
                         ],
                       ),
-                    ),
-                  )
-                ]
-                        //  Tab Bar View  Tan contents
+                      const SizedBox(
+                        height: 4,
+                      ),
+                      Text(
+                        widget.club.name!,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w600, color: Colors.white),
+                      ),
+                      const SizedBox(
+                        height: 4,
+                      ),
+                      SizedBox(
+                          height: 50,
+                          child: AppBar(
+                              backgroundColor: Colors.white,
+                              bottom: TabBar(
+                                unselectedLabelColor: Colors.blueAccent,
+                                indicatorSize: TabBarIndicatorSize.label,
+                                indicator: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: Colors.blueAccent),
+                                tabs: tabs,
+                              ))),
+                      Expanded(
+                          child: TabBarView(children: [
+                        //  Tab Bar View  Tab contents
 
+                        SingleChildScrollView(
+                            child: Container(
+                          margin: EdgeInsets.all(20),
+                          padding: EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.grey, // Shadow color
+                                  offset: Offset(0,
+                                      2), // Offset of the shadow (horizontal, vertical)
+                                  blurRadius: 6, // Spread of the shadow
+                                  spreadRadius: 0, // Expansion of the shadow
+                                ),
+                              ],
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20)),
+                          child: Column(
+                            children: [
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              //Link
+                              Text(
+                                utf8convert(widget.club.description!),
+                              ),
+                            ],
+                          ),
                         )),
-              ],
-            ),
-          ),
-        ));
+                        SingleChildScrollView(
+                            child: Container(
+                          margin: EdgeInsets.only(top: 20),
+                          child: club_members(
+                              widget.app_user, widget.club.teamMembers!),
+                        )),
+                        SingleChildScrollView(
+                          child: Container(
+                            width: width,
+                            height: width * 1.2,
+                            padding: EdgeInsets.all(40),
+                            margin: EdgeInsets.only(top: 20, bottom: 40),
+                            decoration: const BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey, // Shadow color
+                                    offset: Offset(0,
+                                        2), // Offset of the shadow (horizontal, vertical)
+                                    blurRadius: 6, // Spread of the shadow
+                                    spreadRadius: 0, // Expansion of the shadow
+                                  ),
+                                ],
+                                color: Colors.white,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(30),
+                                )),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(builder:
+                                                (BuildContext context) {
+                                          return Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              SizedBox(
+                                                width: 450.0,
+                                                child: Scaffold(
+                                                    appBar: AppBar(
+                                                      centerTitle: true,
+                                                      iconTheme:
+                                                          const IconThemeData(
+                                                              color:
+                                                                  Colors.white),
+                                                      title: Text(
+                                                          widget.club.name!,
+                                                          style:
+                                                              const TextStyle(
+                                                                  color: Colors
+                                                                      .white)),
+                                                      backgroundColor: Colors
+                                                          .indigoAccent[700],
+                                                    ),
+                                                    body: SingleChildScrollView(
+                                                      child: user_postswidget(
+                                                          '',
+                                                          widget.app_user,
+                                                          'club',
+                                                          widget.club.id!),
+                                                    )),
+                                              ),
+                                            ],
+                                          );
+                                        }));
+                                      },
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                              "Posts (" +
+                                                  widget.club.post_count
+                                                      .toString() +
+                                                  ')',
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black,
+                                                  fontSize: 18)),
+                                          const SizedBox(height: 12),
+                                          Container(
+                                            height: width / 3,
+                                            width: width / 3,
+                                            decoration: const BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20)),
+                                                image: DecorationImage(
+                                                    image: AssetImage(
+                                                        "images/posts.jpeg"),
+                                                    fit: BoxFit.cover)),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () async {
+                                        showDialog(
+                                            context: context,
+                                            barrierDismissible: false,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                  contentPadding:
+                                                      EdgeInsets.all(15),
+                                                  content: Container(
+                                                    margin: EdgeInsets.all(10),
+                                                    child: const Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          Text(
+                                                              "Please wait a min....."),
+                                                          SizedBox(height: 10),
+                                                          CircularProgressIndicator()
+                                                        ]),
+                                                  ));
+                                            });
+                                        var event_list =
+                                            await user_profile_servers()
+                                                .get_user_activity_list('',
+                                                    'club', widget.club.id!);
+                                        Navigator.pop(context);
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(builder:
+                                                (BuildContext context) {
+                                          return Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              SizedBox(
+                                                width: 450.0,
+                                                child: Scaffold(
+                                                    appBar: AppBar(
+                                                      centerTitle: true,
+                                                      iconTheme:
+                                                          const IconThemeData(
+                                                              color:
+                                                                  Colors.white),
+                                                      title: Text(
+                                                          widget.club.name!,
+                                                          style:
+                                                              const TextStyle(
+                                                                  color: Colors
+                                                                      .white)),
+                                                      backgroundColor: Colors
+                                                          .indigoAccent[700],
+                                                    ),
+                                                    body: SingleChildScrollView(
+                                                        child:
+                                                            activitieswidget1(
+                                                                event_list,
+                                                                widget.app_user,
+                                                                widget.app_user
+                                                                    .domain!,
+                                                                true))),
+                                              ),
+                                            ],
+                                          );
+                                        }));
+                                      },
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                              "Activities (" +
+                                                  widget.club.activity_count
+                                                      .toString() +
+                                                  ')',
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black,
+                                                  fontSize: 18)),
+                                          const SizedBox(height: 12),
+                                          Container(
+                                            height: width / 3,
+                                            width: width / 3,
+                                            decoration: const BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20)),
+                                                image: DecorationImage(
+                                                    image: AssetImage(
+                                                        "images/profile_activities.jpeg"),
+                                                    fit: BoxFit.cover)),
+                                          )
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                const SizedBox(height: 40),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () async {
+                                        String web_url = widget.club.websites!;
+
+                                        final Uri url = Uri.parse(web_url);
+                                        if (!await launchUrl(url)) {
+                                          throw Exception(
+                                              'Could not launch $url');
+                                        }
+                                      },
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(widget.club.name!,
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black,
+                                                  fontSize: 18)),
+                                          const SizedBox(height: 12),
+                                          Container(
+                                            height: width / 3,
+                                            width: width / 3,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                        Radius.circular(20)),
+                                                image: DecorationImage(
+                                                    image: NetworkImage(
+                                                        widget.club.logo!),
+                                                    fit: BoxFit.cover)),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () async {
+                                        showDialog(
+                                            context: context,
+                                            barrierDismissible: false,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                  contentPadding:
+                                                      EdgeInsets.all(15),
+                                                  content: Container(
+                                                    margin: EdgeInsets.all(10),
+                                                    child: const Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          Text(
+                                                              "Please wait a min....."),
+                                                          SizedBox(height: 10),
+                                                          CircularProgressIndicator()
+                                                        ]),
+                                                  ));
+                                            });
+                                        var thread_list =
+                                            await user_profile_servers()
+                                                .get_user_thread_list('',
+                                                    'club', widget.club.id!);
+                                        Navigator.pop(context);
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(builder:
+                                                (BuildContext context) {
+                                          return Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              SizedBox(
+                                                width: 450.0,
+                                                child: Scaffold(
+                                                    appBar: AppBar(
+                                                      centerTitle: true,
+                                                      iconTheme:
+                                                          const IconThemeData(
+                                                              color:
+                                                                  Colors.white),
+                                                      title: Text(
+                                                          widget.club.name!,
+                                                          style:
+                                                              const TextStyle(
+                                                                  color: Colors
+                                                                      .white)),
+                                                      backgroundColor: Colors
+                                                          .indigoAccent[700],
+                                                    ),
+                                                    body: SingleChildScrollView(
+                                                      child: alertwidget1(
+                                                          thread_list,
+                                                          widget.app_user,
+                                                          widget
+                                                              .app_user.domain!,
+                                                          true),
+                                                    )),
+                                              ),
+                                            ],
+                                          );
+                                        }));
+                                      },
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                              "Threads (" +
+                                                  widget.club.thread_count
+                                                      .toString() +
+                                                  ')',
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black,
+                                                  fontSize: 18)),
+                                          const SizedBox(height: 12),
+                                          Container(
+                                            height: width / 3,
+                                            width: width / 3,
+                                            decoration: const BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20)),
+                                                image: DecorationImage(
+                                                    image: AssetImage(
+                                                        "images/threads profile.jpeg"),
+                                                    fit: BoxFit.cover)),
+                                          )
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      ]
+                              //  Tab Bar View  Tan contents
+
+                              )),
+                    ],
+                  ),
+                ),
+              )),
+        ),
+      ],
+    );
   }
 }
 
@@ -530,7 +600,6 @@ class _club_members1State extends State<club_members1> {
   }
 
   Widget _buildLoadingScreen(SmallUsername club_mem) {
-    var width = MediaQuery.of(context).size.width;
     return Container(
         margin: EdgeInsets.all(2),
         padding: EdgeInsets.all(20),

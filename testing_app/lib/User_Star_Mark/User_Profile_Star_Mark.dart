@@ -199,7 +199,7 @@ class _UserProfileMarkState extends State<UserProfileMark> {
   @override
   Widget build(BuildContext context) {
     SmallUsername user = widget.profile_user;
-    var width = MediaQuery.of(context).size.width;
+    var width = 450.0;
     return GestureDetector(
       onTap: () async {
         if (widget.app_user.email != widget.profile_user.email) {
@@ -288,7 +288,7 @@ class _smallUserProfileMarkState extends State<smallUserProfileMark> {
   @override
   Widget build(BuildContext context) {
     SmallUsername user = widget.profile_user;
-    var width = MediaQuery.of(context).size.width;
+    var width = 450.0;
     return GestureDetector(
       onTap: () async {
         if (widget.app_user.email != widget.profile_user.email) {
@@ -388,7 +388,7 @@ class _UserProfileMarkAdminState extends State<UserProfileMarkAdmin> {
   @override
   Widget build(BuildContext context) {
     var category;
-    var width = MediaQuery.of(context).size.width;
+    var width = 450.0;
     if (widget.post.category == 'club') {
       category = widget.post.club!;
     } else if (widget.post.category == 'fest') {
@@ -505,7 +505,7 @@ class _UserMarkAdminState extends State<UserMarkAdmin> {
   @override
   Widget build(BuildContext context) {
     var category;
-    var width = MediaQuery.of(context).size.width;
+    var width = 450.0;
 
     return GestureDetector(
       onTap: () {

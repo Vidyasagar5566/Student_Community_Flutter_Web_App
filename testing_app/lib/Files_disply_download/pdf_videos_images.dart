@@ -98,101 +98,114 @@ class _pdfviewer1State extends State<pdfviewer1> {
   bool downloading = false;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Flutter PDF Viewer",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        actions: [
-          Text((pagenum) + "/" + totalpage),
-          const SizedBox(width: 10),
-          (widget.yes_no)
-              ? ((ret == "" || ret == "failed")
-                  ? IconButton(
-                      onPressed: () async {
-                        setState(() {
-                          ret = "start";
-                        });
-                        bool _permissionReady = await _checkPermission();
-                        if (_permissionReady) {
-                          await _prepareSaveDir();
-                          print("Downloading");
-                          try {
-                            List<String> urls = widget.pdf_url.split('?');
-                            List<String> sub_urls = urls[0].split("/");
-                            print(_localPath);
-                            final Response response = await Dio().download(
-                                widget.pdf_url,
-                                _localPath + sub_urls[sub_urls.length - 1]);
-                            print(response.data);
-                            setState(() {
-                              ret = "";
-                            });
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Platform.isAndroid
-                                    ? const Text(
-                                        'success, check your download folder',
-                                        style: TextStyle(color: Colors.white),
-                                      )
-                                    : const Text(
-                                        'success, check your InstaBook folder in your "on my iphone"',
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 450.0,
+          child: Scaffold(
+            appBar: AppBar(
+              title: const Text(
+                "Flutter PDF Viewer",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              actions: [
+                Text((pagenum) + "/" + totalpage),
+                const SizedBox(width: 10),
+                (widget.yes_no)
+                    ? ((ret == "" || ret == "failed")
+                        ? IconButton(
+                            onPressed: () async {
+                              setState(() {
+                                ret = "start";
+                              });
+                              bool _permissionReady = await _checkPermission();
+                              if (_permissionReady) {
+                                await _prepareSaveDir();
+                                print("Downloading");
+                                try {
+                                  List<String> urls = widget.pdf_url.split('?');
+                                  List<String> sub_urls = urls[0].split("/");
+                                  print(_localPath);
+                                  final Response response = await Dio()
+                                      .download(
+                                          widget.pdf_url,
+                                          _localPath +
+                                              sub_urls[sub_urls.length - 1]);
+                                  print(response.data);
+                                  setState(() {
+                                    ret = "";
+                                  });
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Platform.isAndroid
+                                          ? const Text(
+                                              'success, check your download folder',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            )
+                                          : const Text(
+                                              'success, check your InstaBook folder in your "on my iphone"',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                    ),
+                                  );
+                                } catch (e) {
+                                  setState(() {
+                                    ret = "failed";
+                                  });
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        'failed',
                                         style: TextStyle(color: Colors.white),
                                       ),
-                              ),
-                            );
-                          } catch (e) {
-                            setState(() {
-                              ret = "failed";
-                            });
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                  'failed',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            );
-                          }
-                        }
-                      },
-                      icon: const Icon(Icons.download_rounded,
-                          color: Colors.blue),
-                    )
-                  : const SizedBox(
-                      height: 12,
-                      width: 12,
-                      child: CircularProgressIndicator(color: Colors.blue)))
-              : Container()
-        ],
-      ),
-      body: isLoading
-          ? Center(child: CircularProgressIndicator())
-          : Container(
-              child: Center(
-                child: PDFView(
-                    filePath: Pfile.path,
-                    autoSpacing: true,
-                    enableSwipe: true,
-                    pageSnap: true,
-                    onError: (error) {
-                      print(error);
-                    },
-                    onPageError: (page, error) {
-                      print('$page: ${error.toString()}');
-                    },
-                    onViewCreated: (PDFViewController vc) {
-                      pdfViewController = vc;
-                    },
-                    onPageChanged: (page, total) {
-                      setState(() {
-                        pagenum = page.toString();
-                        totalpage = total.toString();
-                      });
-                    }),
-              ),
+                                    ),
+                                  );
+                                }
+                              }
+                            },
+                            icon: const Icon(Icons.download_rounded,
+                                color: Colors.blue),
+                          )
+                        : const SizedBox(
+                            height: 12,
+                            width: 12,
+                            child:
+                                CircularProgressIndicator(color: Colors.blue)))
+                    : Container()
+              ],
             ),
+            body: isLoading
+                ? Center(child: CircularProgressIndicator())
+                : Container(
+                    child: Center(
+                      child: PDFView(
+                          filePath: Pfile.path,
+                          autoSpacing: true,
+                          enableSwipe: true,
+                          pageSnap: true,
+                          onError: (error) {
+                            print(error);
+                          },
+                          onPageError: (page, error) {
+                            print('$page: ${error.toString()}');
+                          },
+                          onViewCreated: (PDFViewController vc) {
+                            pdfViewController = vc;
+                          },
+                          onPageChanged: (page, total) {
+                            setState(() {
+                              pagenum = page.toString();
+                              totalpage = total.toString();
+                            });
+                          }),
+                    ),
+                  ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -211,27 +224,35 @@ class _pdfviewerState extends State<pdfviewer> {
   @override
   Widget build(BuildContext context) {
     String name = basename(widget.pdf.path);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(name),
-      ),
-      body: PDFView(
-          filePath: widget.pdf.path,
-          autoSpacing: true,
-          enableSwipe: true,
-          pageSnap: true,
-          onError: (error) {
-            print(error);
-          },
-          onPageError: (page, error) {
-            print('$page: ${error.toString()}');
-          },
-          onViewCreated: (PDFViewController vc) {
-            pdfViewController = vc;
-          },
-          onPageChanged: (page, total) {
-            print('page change: $page/$total');
-          }),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 450.0,
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text(name),
+            ),
+            body: PDFView(
+                filePath: widget.pdf.path,
+                autoSpacing: true,
+                enableSwipe: true,
+                pageSnap: true,
+                onError: (error) {
+                  print(error);
+                },
+                onPageError: (page, error) {
+                  print('$page: ${error.toString()}');
+                },
+                onViewCreated: (PDFViewController vc) {
+                  pdfViewController = vc;
+                },
+                onPageChanged: (page, total) {
+                  print('page change: $page/$total');
+                }),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -304,118 +325,129 @@ class _video_displayState extends State<video_display> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          leading: const BackButton(
-            color: Colors.white, // <-- SEE HERE
-          ),
-          actions: [
-            Container(
-              child: (ret == "" || ret == "failed")
-                  ? IconButton(
-                      onPressed: () async {
-                        setState(() {
-                          ret = "start";
-                        });
-                        bool _permissionReady = await _checkPermission();
-                        if (_permissionReady) {
-                          await _prepareSaveDir();
-                          print("Downloading");
-                          try {
-                            List<String> urls = widget.url.split('?');
-                            List<String> sub_urls = urls[0].split("/");
-                            await Dio().download(widget.url,
-                                _localPath + sub_urls[sub_urls.length - 1]);
-                            setState(() {
-                              ret = "";
-                            });
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                  'success',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            );
-                          } catch (e) {
-                            setState(() {
-                              ret = "failed";
-                            });
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                  'failed',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            );
-                          }
-                        }
-                      },
-                      icon: const Icon(Icons.download_rounded,
-                          color: Colors.white),
-                    )
-                  : const SizedBox(
-                      height: 12,
-                      width: 12,
-                      child: CircularProgressIndicator(color: Colors.white)),
-            )
-          ],
-          backgroundColor: Colors.black,
-        ),
-        body: Container(
-          color: Colors.black,
-          child: Center(
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  _showController = !_showController;
-                });
-              },
-              child: AspectRatio(
-                aspectRatio: _videoPlayerController!.value.aspectRatio,
-                child: Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: <Widget>[
-                    VideoPlayer(_videoPlayerController!),
-                    ClosedCaption(text: null),
-                    _showController == true
-                        ? Center(
-                            child: InkWell(
-                            child: Icon(
-                              _videoPlayerController!.value.isPlaying
-                                  ? Icons.pause_circle_outline
-                                  : Icons.play_circle_outline,
-                              color: Colors.blue,
-                              size: 60,
-                            ),
-                            onTap: () {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 450.0,
+          child: Scaffold(
+              appBar: AppBar(
+                leading: const BackButton(
+                  color: Colors.white, // <-- SEE HERE
+                ),
+                actions: [
+                  Container(
+                    child: (ret == "" || ret == "failed")
+                        ? IconButton(
+                            onPressed: () async {
                               setState(() {
-                                _videoPlayerController!.value.isPlaying
-                                    ? _videoPlayerController!.pause()
-                                    : _videoPlayerController!.play();
-                                _showController = !_showController;
+                                ret = "start";
                               });
+                              bool _permissionReady = await _checkPermission();
+                              if (_permissionReady) {
+                                await _prepareSaveDir();
+                                print("Downloading");
+                                try {
+                                  List<String> urls = widget.url.split('?');
+                                  List<String> sub_urls = urls[0].split("/");
+                                  await Dio().download(
+                                      widget.url,
+                                      _localPath +
+                                          sub_urls[sub_urls.length - 1]);
+                                  setState(() {
+                                    ret = "";
+                                  });
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        'success',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  );
+                                } catch (e) {
+                                  setState(() {
+                                    ret = "failed";
+                                  });
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        'failed',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  );
+                                }
+                              }
                             },
-                          ))
-                        : Container(),
-                    // Here you can also add Overlay capacities
-                    VideoProgressIndicator(
-                      _videoPlayerController!,
-                      allowScrubbing: true,
-                      padding: EdgeInsets.all(3),
-                      colors: const VideoProgressColors(
-                        backgroundColor: Colors.black,
-                        playedColor: Colors.white,
-                        bufferedColor: Colors.white70,
+                            icon: const Icon(Icons.download_rounded,
+                                color: Colors.white),
+                          )
+                        : const SizedBox(
+                            height: 12,
+                            width: 12,
+                            child:
+                                CircularProgressIndicator(color: Colors.white)),
+                  )
+                ],
+                backgroundColor: Colors.black,
+              ),
+              body: Container(
+                color: Colors.black,
+                child: Center(
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _showController = !_showController;
+                      });
+                    },
+                    child: AspectRatio(
+                      aspectRatio: _videoPlayerController!.value.aspectRatio,
+                      child: Stack(
+                        alignment: Alignment.bottomCenter,
+                        children: <Widget>[
+                          VideoPlayer(_videoPlayerController!),
+                          ClosedCaption(text: null),
+                          _showController == true
+                              ? Center(
+                                  child: InkWell(
+                                  child: Icon(
+                                    _videoPlayerController!.value.isPlaying
+                                        ? Icons.pause_circle_outline
+                                        : Icons.play_circle_outline,
+                                    color: Colors.blue,
+                                    size: 60,
+                                  ),
+                                  onTap: () {
+                                    setState(() {
+                                      _videoPlayerController!.value.isPlaying
+                                          ? _videoPlayerController!.pause()
+                                          : _videoPlayerController!.play();
+                                      _showController = !_showController;
+                                    });
+                                  },
+                                ))
+                              : Container(),
+                          // Here you can also add Overlay capacities
+                          VideoProgressIndicator(
+                            _videoPlayerController!,
+                            allowScrubbing: true,
+                            padding: EdgeInsets.all(3),
+                            colors: const VideoProgressColors(
+                              backgroundColor: Colors.black,
+                              playedColor: Colors.white,
+                              bufferedColor: Colors.white70,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          ),
-        ));
+              )),
+        ),
+      ],
+    );
   }
 
   @override
@@ -458,66 +490,74 @@ class _video_display1State extends State<video_display1> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          leading: const BackButton(
-            color: Colors.white, // <-- SEE HERE
-          ),
-          backgroundColor: Colors.black,
-        ),
-        body: Container(
-          color: Colors.black,
-          child: Center(
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  _showController = !_showController;
-                });
-              },
-              child: AspectRatio(
-                aspectRatio: _videoPlayerController!.value.aspectRatio,
-                child: Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: <Widget>[
-                    VideoPlayer(_videoPlayerController!),
-                    ClosedCaption(text: null),
-                    _showController == true
-                        ? Center(
-                            child: InkWell(
-                            child: Icon(
-                              _videoPlayerController!.value.isPlaying
-                                  ? Icons.pause_circle_outline
-                                  : Icons.play_circle_outline,
-                              color: Colors.blue,
-                              size: 60,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 450.0,
+          child: Scaffold(
+              appBar: AppBar(
+                leading: const BackButton(
+                  color: Colors.white, // <-- SEE HERE
+                ),
+                backgroundColor: Colors.black,
+              ),
+              body: Container(
+                color: Colors.black,
+                child: Center(
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _showController = !_showController;
+                      });
+                    },
+                    child: AspectRatio(
+                      aspectRatio: _videoPlayerController!.value.aspectRatio,
+                      child: Stack(
+                        alignment: Alignment.bottomCenter,
+                        children: <Widget>[
+                          VideoPlayer(_videoPlayerController!),
+                          ClosedCaption(text: null),
+                          _showController == true
+                              ? Center(
+                                  child: InkWell(
+                                  child: Icon(
+                                    _videoPlayerController!.value.isPlaying
+                                        ? Icons.pause_circle_outline
+                                        : Icons.play_circle_outline,
+                                    color: Colors.blue,
+                                    size: 60,
+                                  ),
+                                  onTap: () {
+                                    setState(() {
+                                      _videoPlayerController!.value.isPlaying
+                                          ? _videoPlayerController!.pause()
+                                          : _videoPlayerController!.play();
+                                      _showController = !_showController;
+                                    });
+                                  },
+                                ))
+                              : Container(),
+                          // Here you can also add Overlay capacities
+                          VideoProgressIndicator(
+                            _videoPlayerController!,
+                            allowScrubbing: true,
+                            padding: EdgeInsets.all(3),
+                            colors: const VideoProgressColors(
+                              backgroundColor: Colors.black,
+                              playedColor: Colors.white,
+                              bufferedColor: Colors.white70,
                             ),
-                            onTap: () {
-                              setState(() {
-                                _videoPlayerController!.value.isPlaying
-                                    ? _videoPlayerController!.pause()
-                                    : _videoPlayerController!.play();
-                                _showController = !_showController;
-                              });
-                            },
-                          ))
-                        : Container(),
-                    // Here you can also add Overlay capacities
-                    VideoProgressIndicator(
-                      _videoPlayerController!,
-                      allowScrubbing: true,
-                      padding: EdgeInsets.all(3),
-                      colors: const VideoProgressColors(
-                        backgroundColor: Colors.black,
-                        playedColor: Colors.white,
-                        bufferedColor: Colors.white70,
+                          ),
+                        ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          ),
-        ));
+              )),
+        ),
+      ],
+    );
   }
 
   @override
@@ -591,124 +631,139 @@ class _video_display3State extends State<video_display3> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          leading: const BackButton(
-            color: Colors.white, // <-- SEE HERE
-          ),
-          actions: [
-            (ret == "" || ret == "failed")
-                ? IconButton(
-                    onPressed: () async {
-                      setState(() {
-                        ret = "start";
-                      });
-                      bool _permissionReady = await _checkPermission();
-                      if (_permissionReady) {
-                        await _prepareSaveDir();
-                        print("Downloading");
-                        try {
-                          List<String> urls = widget.url.split('?');
-                          List<String> sub_urls = urls[0].split("/");
-                          print(_localPath);
-                          final Response response = await Dio().download(
-                              widget.url,
-                              _localPath + sub_urls[sub_urls.length - 1]);
-                          print(response.data);
-                          setState(() {
-                            ret = "";
-                          });
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Platform.isAndroid
-                                  ? const Text(
-                                      'success, check your download folder',
-                                      style: TextStyle(color: Colors.white),
-                                    )
-                                  : const Text(
-                                      'success, check your InstaBook folder in your "on my iphone"',
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 450.0,
+          child: Scaffold(
+              appBar: AppBar(
+                leading: const BackButton(
+                  color: Colors.white, // <-- SEE HERE
+                ),
+                actions: [
+                  (ret == "" || ret == "failed")
+                      ? IconButton(
+                          onPressed: () async {
+                            setState(() {
+                              ret = "start";
+                            });
+                            bool _permissionReady = await _checkPermission();
+                            if (_permissionReady) {
+                              await _prepareSaveDir();
+                              print("Downloading");
+                              try {
+                                List<String> urls = widget.url.split('?');
+                                List<String> sub_urls = urls[0].split("/");
+                                print(_localPath);
+                                final Response response = await Dio().download(
+                                    widget.url,
+                                    _localPath + sub_urls[sub_urls.length - 1]);
+                                print(response.data);
+                                setState(() {
+                                  ret = "";
+                                });
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Platform.isAndroid
+                                        ? const Text(
+                                            'success, check your download folder',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          )
+                                        : const Text(
+                                            'success, check your InstaBook folder in your "on my iphone"',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                  ),
+                                );
+                              } catch (e) {
+                                setState(() {
+                                  ret = "failed";
+                                });
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      'failed',
                                       style: TextStyle(color: Colors.white),
                                     ),
-                            ),
-                          );
-                        } catch (e) {
-                          setState(() {
-                            ret = "failed";
-                          });
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                'failed',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          );
-                        }
-                      }
+                                  ),
+                                );
+                              }
+                            }
+                          },
+                          icon: const Icon(Icons.download_rounded,
+                              color: Colors.white),
+                        )
+                      : const SizedBox(
+                          height: 12,
+                          width: 12,
+                          child: CircularProgressIndicator(color: Colors.white))
+                ],
+                backgroundColor: Colors.black,
+              ),
+              body: Container(
+                color: Colors.black,
+                child: Center(
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _showController = !_showController;
+                      });
                     },
-                    icon:
-                        const Icon(Icons.download_rounded, color: Colors.white),
-                  )
-                : const SizedBox(
-                    height: 12,
-                    width: 12,
-                    child: CircularProgressIndicator(color: Colors.white))
-          ],
-          backgroundColor: Colors.black,
-        ),
-        body: Container(
-          color: Colors.black,
-          child: Center(
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  _showController = !_showController;
-                });
-              },
-              child: AspectRatio(
-                aspectRatio: widget._videoPlayerController.value.aspectRatio,
-                child: Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: <Widget>[
-                    VideoPlayer(widget._videoPlayerController),
-                    ClosedCaption(text: null),
-                    _showController == true
-                        ? Center(
-                            child: InkWell(
-                            child: Icon(
-                              widget._videoPlayerController.value.isPlaying
-                                  ? Icons.pause_circle_outline
-                                  : Icons.play_circle_outline,
-                              color: Colors.blue,
-                              size: 60,
+                    child: AspectRatio(
+                      aspectRatio:
+                          widget._videoPlayerController.value.aspectRatio,
+                      child: Stack(
+                        alignment: Alignment.bottomCenter,
+                        children: <Widget>[
+                          VideoPlayer(widget._videoPlayerController),
+                          ClosedCaption(text: null),
+                          _showController == true
+                              ? Center(
+                                  child: InkWell(
+                                  child: Icon(
+                                    widget._videoPlayerController.value
+                                            .isPlaying
+                                        ? Icons.pause_circle_outline
+                                        : Icons.play_circle_outline,
+                                    color: Colors.blue,
+                                    size: 60,
+                                  ),
+                                  onTap: () {
+                                    setState(() {
+                                      widget._videoPlayerController.value
+                                              .isPlaying
+                                          ? widget._videoPlayerController
+                                              .pause()
+                                          : widget._videoPlayerController
+                                              .play();
+                                      _showController = !_showController;
+                                    });
+                                  },
+                                ))
+                              : Container(),
+                          // Here you can also add Overlay capacities
+                          VideoProgressIndicator(
+                            widget._videoPlayerController,
+                            allowScrubbing: true,
+                            padding: EdgeInsets.all(3),
+                            colors: const VideoProgressColors(
+                              backgroundColor: Colors.black,
+                              playedColor: Colors.white,
+                              bufferedColor: Colors.white70,
                             ),
-                            onTap: () {
-                              setState(() {
-                                widget._videoPlayerController.value.isPlaying
-                                    ? widget._videoPlayerController.pause()
-                                    : widget._videoPlayerController.play();
-                                _showController = !_showController;
-                              });
-                            },
-                          ))
-                        : Container(),
-                    // Here you can also add Overlay capacities
-                    VideoProgressIndicator(
-                      widget._videoPlayerController,
-                      allowScrubbing: true,
-                      padding: EdgeInsets.all(3),
-                      colors: const VideoProgressColors(
-                        backgroundColor: Colors.black,
-                        playedColor: Colors.white,
-                        bufferedColor: Colors.white70,
+                          ),
+                        ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          ),
-        ));
+              )),
+        ),
+      ],
+    );
   }
 
   @override
@@ -793,123 +848,138 @@ class _video_display4State extends State<video_display4> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          leading: const BackButton(
-            color: Colors.white, // <-- SEE HERE
-          ),
-          actions: [
-            !widget.insert
-                ? Container(
-                    child: (ret == "" || ret == "failed")
-                        ? IconButton(
-                            onPressed: () async {
-                              setState(() {
-                                ret = "start";
-                              });
-                              bool _permissionReady = await _checkPermission();
-                              if (_permissionReady) {
-                                await _prepareSaveDir();
-                                print("Downloading");
-                                try {
-                                  List<String> urls = widget.url.split('?');
-                                  List<String> sub_urls = urls[0].split("/");
-                                  await Dio().download(
-                                      widget.url,
-                                      _localPath +
-                                          sub_urls[sub_urls.length - 1]);
-                                  setState(() {
-                                    ret = "";
-                                  });
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                        'success',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                  );
-                                } catch (e) {
-                                  setState(() {
-                                    ret = "failed";
-                                  });
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                        'failed',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                  );
-                                }
-                              }
-                            },
-                            icon: const Icon(Icons.download_rounded,
-                                color: Colors.white),
-                          )
-                        : const SizedBox(
-                            height: 12,
-                            width: 12,
-                            child:
-                                CircularProgressIndicator(color: Colors.white)),
-                  )
-                : Container()
-          ],
-          backgroundColor: Colors.black,
-        ),
-        body: Container(
-          color: Colors.black,
-          child: Center(
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  _showController = !_showController;
-                });
-              },
-              child: AspectRatio(
-                aspectRatio: _videoPlayerController!.value.aspectRatio,
-                child: Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: <Widget>[
-                    VideoPlayer(_videoPlayerController!),
-                    ClosedCaption(text: null),
-                    _showController == true
-                        ? Center(
-                            child: InkWell(
-                            child: Icon(
-                              _videoPlayerController!.value.isPlaying
-                                  ? Icons.pause_circle_outline
-                                  : Icons.play_circle_outline,
-                              color: Colors.blue,
-                              size: 60,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 450.0,
+          child: Scaffold(
+              appBar: AppBar(
+                leading: const BackButton(
+                  color: Colors.white, // <-- SEE HERE
+                ),
+                actions: [
+                  !widget.insert
+                      ? Container(
+                          child: (ret == "" || ret == "failed")
+                              ? IconButton(
+                                  onPressed: () async {
+                                    setState(() {
+                                      ret = "start";
+                                    });
+                                    bool _permissionReady =
+                                        await _checkPermission();
+                                    if (_permissionReady) {
+                                      await _prepareSaveDir();
+                                      print("Downloading");
+                                      try {
+                                        List<String> urls =
+                                            widget.url.split('?');
+                                        List<String> sub_urls =
+                                            urls[0].split("/");
+                                        await Dio().download(
+                                            widget.url,
+                                            _localPath +
+                                                sub_urls[sub_urls.length - 1]);
+                                        setState(() {
+                                          ret = "";
+                                        });
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                            content: Text(
+                                              'success',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        );
+                                      } catch (e) {
+                                        setState(() {
+                                          ret = "failed";
+                                        });
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                            content: Text(
+                                              'failed',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                    }
+                                  },
+                                  icon: const Icon(Icons.download_rounded,
+                                      color: Colors.white),
+                                )
+                              : const SizedBox(
+                                  height: 12,
+                                  width: 12,
+                                  child: CircularProgressIndicator(
+                                      color: Colors.white)),
+                        )
+                      : Container()
+                ],
+                backgroundColor: Colors.black,
+              ),
+              body: Container(
+                color: Colors.black,
+                child: Center(
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _showController = !_showController;
+                      });
+                    },
+                    child: AspectRatio(
+                      aspectRatio: _videoPlayerController!.value.aspectRatio,
+                      child: Stack(
+                        alignment: Alignment.bottomCenter,
+                        children: <Widget>[
+                          VideoPlayer(_videoPlayerController!),
+                          ClosedCaption(text: null),
+                          _showController == true
+                              ? Center(
+                                  child: InkWell(
+                                  child: Icon(
+                                    _videoPlayerController!.value.isPlaying
+                                        ? Icons.pause_circle_outline
+                                        : Icons.play_circle_outline,
+                                    color: Colors.blue,
+                                    size: 60,
+                                  ),
+                                  onTap: () {
+                                    setState(() {
+                                      _videoPlayerController!.value.isPlaying
+                                          ? _videoPlayerController!.pause()
+                                          : _videoPlayerController!.play();
+                                      _showController = !_showController;
+                                    });
+                                  },
+                                ))
+                              : Container(),
+                          // Here you can also add Overlay capacities
+                          VideoProgressIndicator(
+                            _videoPlayerController!,
+                            allowScrubbing: true,
+                            padding: EdgeInsets.all(3),
+                            colors: const VideoProgressColors(
+                              backgroundColor: Colors.black,
+                              playedColor: Colors.white,
+                              bufferedColor: Colors.white70,
                             ),
-                            onTap: () {
-                              setState(() {
-                                _videoPlayerController!.value.isPlaying
-                                    ? _videoPlayerController!.pause()
-                                    : _videoPlayerController!.play();
-                                _showController = !_showController;
-                              });
-                            },
-                          ))
-                        : Container(),
-                    // Here you can also add Overlay capacities
-                    VideoProgressIndicator(
-                      _videoPlayerController!,
-                      allowScrubbing: true,
-                      padding: EdgeInsets.all(3),
-                      colors: const VideoProgressColors(
-                        backgroundColor: Colors.black,
-                        playedColor: Colors.white,
-                        bufferedColor: Colors.white70,
+                          ),
+                        ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          ),
-        ));
+              )),
+        ),
+      ],
+    );
   }
 
   @override
@@ -932,24 +1002,32 @@ class image_display extends StatefulWidget {
 class _image_displayState extends State<image_display> {
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
+    var width = 450.0;
     var height = MediaQuery.of(context).size.height;
-    return Scaffold(
-        appBar: AppBar(
-          leading: const BackButton(
-            color: Colors.white, // <-- SEE HERE
-          ),
-          backgroundColor: Colors.black,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 450.0,
+          child: Scaffold(
+              appBar: AppBar(
+                leading: const BackButton(
+                  color: Colors.white, // <-- SEE HERE
+                ),
+                backgroundColor: Colors.black,
+              ),
+              body: Container(
+                height: height,
+                width: width,
+                color: Colors.black,
+                child: Center(
+                    child: !widget.insert
+                        ? Image(image: NetworkImage(widget.url))
+                        : Image(image: FileImage(widget.file))),
+              )),
         ),
-        body: Container(
-          height: height,
-          width: width,
-          color: Colors.black,
-          child: Center(
-              child: !widget.insert
-                  ? Image(image: NetworkImage(widget.url))
-                  : Image(image: FileImage(widget.file))),
-        ));
+      ],
+    );
   }
 }
 
@@ -969,101 +1047,108 @@ class _all_files_displayState extends State<all_files_display> {
   Widget build(BuildContext context) {
     String file = widget.file1;
     double file_type = widget.file_type1;
-    return GestureDetector(
-      onTap: () {
-        if (file_type == 2) {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (BuildContext context) {
-            return video_display(file);
-          }));
-        }
-        if (file_type == 1) {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (BuildContext context) {
-            return image_display(false, File('images/club.jpg'), file);
-          }));
-        }
-      },
-      child: file_type == 0
-          ? Container()
-          : file_type == 1
-              ? Container(
-                  width: 100,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.indigo[900]),
-                  child: Container(
-                      padding: EdgeInsets.all(13),
-                      height: 100,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: Colors.blue[50],
-                          image: DecorationImage(
-                              image: NetworkImage(file), fit: BoxFit.cover))),
-                )
-              : file_type == 2
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        GestureDetector(
+          onTap: () {
+            if (file_type == 2) {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (BuildContext context) {
+                return video_display(file);
+              }));
+            }
+            if (file_type == 1) {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (BuildContext context) {
+                return image_display(false, File('images/club.jpg'), file);
+              }));
+            }
+          },
+          child: file_type == 0
+              ? Container()
+              : file_type == 1
                   ? Container(
                       width: 100,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.indigo[900]),
                       child: Container(
-                        height: 100,
-                        padding: EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.black,
-                        ),
-                        child: Stack(
-                          alignment: Alignment.bottomCenter,
-                          children: <Widget>[
-                            ClosedCaption(text: null),
-                            _showController == true
-                                ? Center(
-                                    child: InkWell(
-                                    child: const Icon(
-                                      Icons.play_circle_outline,
-                                      color: Colors.blue,
-                                      size: 30,
-                                    ),
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (BuildContext context) {
-                                        return video_display(file);
-                                      }));
-                                    },
-                                  ))
-                                : Container(),
-                            // Here you can also add Overlay capacities
-                          ],
-                        ),
-                      ),
+                          padding: EdgeInsets.all(13),
+                          height: 100,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: Colors.blue[50],
+                              image: DecorationImage(
+                                  image: NetworkImage(file),
+                                  fit: BoxFit.cover))),
                     )
-                  : GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(
-                            MaterialPageRoute(builder: (BuildContext context) {
-                          return pdfviewer1(file, true);
-                        }));
-                      },
-                      child: Container(
-                        width: 150,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.indigo[900]),
-                        child: Center(
+                  : file_type == 2
+                      ? Container(
+                          width: 100,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.indigo[900]),
                           child: Container(
-                            padding: EdgeInsets.all(3),
                             height: 100,
+                            padding: EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.black,
+                            ),
+                            child: Stack(
+                              alignment: Alignment.bottomCenter,
+                              children: <Widget>[
+                                ClosedCaption(text: null),
+                                _showController == true
+                                    ? Center(
+                                        child: InkWell(
+                                        child: const Icon(
+                                          Icons.play_circle_outline,
+                                          color: Colors.blue,
+                                          size: 30,
+                                        ),
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(builder:
+                                                  (BuildContext context) {
+                                            return video_display(file);
+                                          }));
+                                        },
+                                      ))
+                                    : Container(),
+                                // Here you can also add Overlay capacities
+                              ],
+                            ),
+                          ),
+                        )
+                      : GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (BuildContext context) {
+                              return pdfviewer1(file, true);
+                            }));
+                          },
+                          child: Container(
+                            width: 150,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                image: const DecorationImage(
-                                    image: AssetImage("images/Explorer.png"),
-                                    fit: BoxFit.cover)),
-                          ),
-                        ),
-                      )),
+                                color: Colors.indigo[900]),
+                            child: Center(
+                              child: Container(
+                                padding: EdgeInsets.all(3),
+                                height: 100,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    image: const DecorationImage(
+                                        image:
+                                            AssetImage("images/Explorer.png"),
+                                        fit: BoxFit.cover)),
+                              ),
+                            ),
+                          )),
+        ),
+      ],
     );
   }
 }
@@ -1084,101 +1169,107 @@ class _all_files_display1State extends State<all_files_display1> {
   Widget build(BuildContext context) {
     File file = widget.file1;
     double file_type = widget.file_type1;
-    return GestureDetector(
-      onTap: () {
-        if (file_type == 2) {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (BuildContext context) {
-            return video_display1(file);
-          }));
-        }
-        if (file_type == 1) {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (BuildContext context) {
-            return image_display(true, file, "");
-          }));
-        }
-      },
-      child: file_type == 0
-          ? Container()
-          : file_type == 1
-              ? Container(
-                  width: 100,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.indigo[900]),
-                  child: Container(
-                      padding: EdgeInsets.all(13),
-                      height: 100,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: Colors.blue[50],
-                          image: DecorationImage(
-                              image: FileImage(file), fit: BoxFit.cover))),
-                )
-              : file_type == 2
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        GestureDetector(
+          onTap: () {
+            if (file_type == 2) {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (BuildContext context) {
+                return video_display1(file);
+              }));
+            }
+            if (file_type == 1) {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (BuildContext context) {
+                return image_display(true, file, "");
+              }));
+            }
+          },
+          child: file_type == 0
+              ? Container()
+              : file_type == 1
                   ? Container(
                       width: 100,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.indigo[900]),
                       child: Container(
-                        height: 100,
-                        padding: EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.black,
-                        ),
-                        child: Stack(
-                          alignment: Alignment.bottomCenter,
-                          children: <Widget>[
-                            ClosedCaption(text: null),
-                            _showController == true
-                                ? Center(
-                                    child: InkWell(
-                                    child: const Icon(
-                                      Icons.play_circle_outline,
-                                      color: Colors.blue,
-                                      size: 30,
-                                    ),
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (BuildContext context) {
-                                        return video_display1(file);
-                                      }));
-                                    },
-                                  ))
-                                : Container(),
-                            // Here you can also add Overlay capacities
-                          ],
-                        ),
-                      ),
+                          padding: EdgeInsets.all(13),
+                          height: 100,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: Colors.blue[50],
+                              image: DecorationImage(
+                                  image: FileImage(file), fit: BoxFit.cover))),
                     )
-                  : GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(
-                            MaterialPageRoute(builder: (BuildContext context) {
-                          return pdfviewer(file);
-                        }));
-                      },
-                      child: Container(
-                        width: 150,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.indigo[900]),
-                        child: Center(
+                  : file_type == 2
+                      ? Container(
+                          width: 100,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.indigo[900]),
                           child: Container(
-                            padding: EdgeInsets.all(3),
                             height: 100,
+                            padding: EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.black,
+                            ),
+                            child: Stack(
+                              alignment: Alignment.bottomCenter,
+                              children: <Widget>[
+                                ClosedCaption(text: null),
+                                _showController == true
+                                    ? Center(
+                                        child: InkWell(
+                                        child: const Icon(
+                                          Icons.play_circle_outline,
+                                          color: Colors.blue,
+                                          size: 30,
+                                        ),
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(builder:
+                                                  (BuildContext context) {
+                                            return video_display1(file);
+                                          }));
+                                        },
+                                      ))
+                                    : Container(),
+                                // Here you can also add Overlay capacities
+                              ],
+                            ),
+                          ),
+                        )
+                      : GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (BuildContext context) {
+                              return pdfviewer(file);
+                            }));
+                          },
+                          child: Container(
+                            width: 150,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                image: const DecorationImage(
-                                    image: AssetImage("images/Explorer.png"),
-                                    fit: BoxFit.cover)),
-                          ),
-                        ),
-                      )),
+                                color: Colors.indigo[900]),
+                            child: Center(
+                              child: Container(
+                                padding: EdgeInsets.all(3),
+                                height: 100,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    image: const DecorationImage(
+                                        image:
+                                            AssetImage("images/Explorer.png"),
+                                        fit: BoxFit.cover)),
+                              ),
+                            ),
+                          )),
+        ),
+      ],
     );
   }
 }

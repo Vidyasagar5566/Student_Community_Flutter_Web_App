@@ -124,7 +124,7 @@ class _Show_all_sub_ratingsState extends State<Show_all_sub_ratings> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        width: MediaQuery.of(context).size.width,
+        width: 450.0,
         child: Column(
           children: [
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -259,207 +259,230 @@ class _placementsState extends State<placements> {
       _extand.add(false);
       _loaded.add(false);
     }
-    var wid = MediaQuery.of(context).size.width;
-    return Scaffold(
-        body: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            //color: Colors.pink[100],
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage("images/background.jpg"),
-                  fit: BoxFit.cover),
-            ),
-            margin: const EdgeInsets.only(bottom: 20),
-            child: SingleChildScrollView(
-              child: Column(
-                  //mainAxisAlignment: MainAxisAlignment.center,
-                  //crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        ClipPath(
-                            clipper: profile_Clipper(),
-                            child: Container(
-                              height: 250,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                colors: [
-                                  Colors.deepPurple,
-                                  Colors.purple.shade300
-                                ],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              )),
-                            )),
-                        Positioned(
-                            left: 25,
-                            top: 75,
-                            child: Row(
-                              children: [
-                                IconButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  icon: const Icon(
-                                    Icons.arrow_back_ios_new_outlined,
-                                    color: Colors.white,
-                                    size: 30,
-                                  ),
-                                ),
-                                const SizedBox(width: 20),
-                                SizedBox(
-                                    width: wid / 1.7,
-                                    child: Text(
-                                      "Placements : " +
-                                          widget.cal_sub_names.length
-                                              .toString(),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.w700),
+    var wid = 450.0;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 450.0,
+          child: Scaffold(
+              body: Container(
+                  width: 450.0,
+                  height: MediaQuery.of(context).size.height,
+                  //color: Colors.pink[100],
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage("images/background.jpg"),
+                        fit: BoxFit.cover),
+                  ),
+                  margin: const EdgeInsets.only(bottom: 20),
+                  child: SingleChildScrollView(
+                    child: Column(
+                        //mainAxisAlignment: MainAxisAlignment.center,
+                        //crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              ClipPath(
+                                  clipper: profile_Clipper(),
+                                  child: Container(
+                                    height: 250,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                      colors: [
+                                        Colors.deepPurple,
+                                        Colors.purple.shade300
+                                      ],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
                                     )),
-                              ],
-                            ))
-                      ],
-                    ),
-                    build_screen()
-                  ]),
-            )),
-        floatingActionButton: widget.app_user.isInstabook!
-            ? ElevatedButton.icon(
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (context) {
-                        return AlertDialog(
-                            contentPadding: EdgeInsets.all(15),
-                            content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                  )),
+                              Positioned(
+                                  left: 25,
+                                  top: 75,
+                                  child: Row(
                                     children: [
-                                      Container(),
                                       IconButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          icon: const Icon(Icons.close))
-                                    ],
-                                  ),
-                                  Container(
-                                    padding:
-                                        EdgeInsets.only(left: 40, right: 40),
-                                    child: TextField(
-                                      keyboardType: TextInputType.emailAddress,
-                                      decoration: const InputDecoration(
-                                          labelText: "Company name",
-                                          hintText: "TCS",
-                                          prefixIcon: Icon(Icons.text_fields),
-                                          border: OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(10)))),
-                                      onChanged: (String value) {
-                                        setState(() {
-                                          sub_name = value;
-                                          if (value == "") {
-                                            sub_name = null;
-                                          }
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  TextButton(
-                                      onPressed: () async {
-                                        if (!widget.app_user.isAdmin!) {
+                                        onPressed: () {
                                           Navigator.pop(context);
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                              duration:
-                                                  Duration(milliseconds: 400),
-                                              content: Text(
-                                                "Guests/Students are not allowed",
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              ),
-                                            ),
-                                          );
-                                        } else {
-                                          if (sub_name == null) {
-                                            Navigator.pop(context);
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              const SnackBar(
-                                                duration:
-                                                    Duration(milliseconds: 400),
-                                                content: Text(
-                                                  "sub name cant be null",
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                ),
-                                              ),
-                                            );
-                                          } else {
-                                            Navigator.pop(context);
-
-                                            List<dynamic> error =
-                                                await placemeny_servers()
-                                                    .post_cal_sub(
-                                                        sub_name, 'CPC');
-                                            if (!error[0]) {
-                                              var new_sub_name =
-                                                  CAL_SUB_NAMES();
-                                              new_sub_name.id = error[1];
-                                              new_sub_name.subId = 'CPC';
-                                              new_sub_name.subName = sub_name;
-                                              new_sub_name.username =
-                                                  user_min(widget.app_user);
-                                              new_sub_name.totRatingsVal = 0;
-                                              new_sub_name.numRatings = 0;
+                                        },
+                                        icon: const Icon(
+                                          Icons.arrow_back_ios_new_outlined,
+                                          color: Colors.white,
+                                          size: 30,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 20),
+                                      SizedBox(
+                                          width: wid / 1.7,
+                                          child: Text(
+                                            "Placements : " +
+                                                widget.cal_sub_names.length
+                                                    .toString(),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 25,
+                                                fontWeight: FontWeight.w700),
+                                          )),
+                                    ],
+                                  ))
+                            ],
+                          ),
+                          build_screen()
+                        ]),
+                  )),
+              floatingActionButton: widget.app_user.isInstabook!
+                  ? ElevatedButton.icon(
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (context) {
+                              return AlertDialog(
+                                  contentPadding: EdgeInsets.all(15),
+                                  content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Container(),
+                                            IconButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                icon: const Icon(Icons.close))
+                                          ],
+                                        ),
+                                        Container(
+                                          padding: EdgeInsets.only(
+                                              left: 40, right: 40),
+                                          child: TextField(
+                                            keyboardType:
+                                                TextInputType.emailAddress,
+                                            decoration: const InputDecoration(
+                                                labelText: "Company name",
+                                                hintText: "TCS",
+                                                prefixIcon:
+                                                    Icon(Icons.text_fields),
+                                                border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                10)))),
+                                            onChanged: (String value) {
                                               setState(() {
-                                                cal_sub_names.add(new_sub_name);
-                                                widget.cal_sub_names
-                                                    .add(new_sub_name);
+                                                sub_name = value;
+                                                if (value == "") {
+                                                  sub_name = null;
+                                                }
                                               });
-                                            } else {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(const SnackBar(
+                                            },
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        TextButton(
+                                            onPressed: () async {
+                                              if (!widget.app_user.isAdmin!) {
+                                                Navigator.pop(context);
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  const SnackBar(
+                                                    duration: Duration(
+                                                        milliseconds: 400),
+                                                    content: Text(
+                                                      "Guests/Students are not allowed",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                                  ),
+                                                );
+                                              } else {
+                                                if (sub_name == null) {
+                                                  Navigator.pop(context);
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    const SnackBar(
                                                       duration: Duration(
                                                           milliseconds: 400),
                                                       content: Text(
-                                                        "error occured please try again",
+                                                        "sub name cant be null",
                                                         style: TextStyle(
                                                             color:
                                                                 Colors.white),
-                                                      )));
-                                            }
-                                          }
-                                        }
-                                      },
-                                      child: const Center(child: Text("Add")))
-                                ]));
-                      });
-                },
-                label: const Text("Add new company",
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold)),
-                icon: const Icon(Icons.edit, color: Colors.white),
-                style: ElevatedButton.styleFrom(primary: Colors.deepPurple),
-              )
-            : Container());
+                                                      ),
+                                                    ),
+                                                  );
+                                                } else {
+                                                  Navigator.pop(context);
+
+                                                  List<dynamic> error =
+                                                      await placemeny_servers()
+                                                          .post_cal_sub(
+                                                              sub_name, 'CPC');
+                                                  if (!error[0]) {
+                                                    var new_sub_name =
+                                                        CAL_SUB_NAMES();
+                                                    new_sub_name.id = error[1];
+                                                    new_sub_name.subId = 'CPC';
+                                                    new_sub_name.subName =
+                                                        sub_name;
+                                                    new_sub_name.username =
+                                                        user_min(
+                                                            widget.app_user);
+                                                    new_sub_name.totRatingsVal =
+                                                        0;
+                                                    new_sub_name.numRatings = 0;
+                                                    setState(() {
+                                                      cal_sub_names
+                                                          .add(new_sub_name);
+                                                      widget.cal_sub_names
+                                                          .add(new_sub_name);
+                                                    });
+                                                  } else {
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
+                                                            const SnackBar(
+                                                                duration: Duration(
+                                                                    milliseconds:
+                                                                        400),
+                                                                content: Text(
+                                                                  "error occured please try again",
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white),
+                                                                )));
+                                                  }
+                                                }
+                                              }
+                                            },
+                                            child: const Center(
+                                                child: Text("Add")))
+                                      ]));
+                            });
+                      },
+                      label: const Text("Add new company",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold)),
+                      icon: const Icon(Icons.edit, color: Colors.white),
+                      style:
+                          ElevatedButton.styleFrom(primary: Colors.deepPurple),
+                    )
+                  : Container()),
+        ),
+      ],
+    );
   }
 
   build_screen() {
-    var wid = MediaQuery.of(context).size.width;
+    var wid = 450.0;
     return !loaded_data
         ? const CircularProgressIndicator()
         : Container(
@@ -910,210 +933,235 @@ class _place_yearsState extends State<place_years> {
 
   @override
   Widget build(BuildContext context) {
-    var wid = MediaQuery.of(context).size.width;
+    var wid = 450.0;
     //sub_years = widget.cal_sub_years_list;
-    return Scaffold(
-        body: SingleChildScrollView(
-            child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                //color: Colors.pink[100],
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("images/background.jpg"),
-                      fit: BoxFit.cover),
-                ),
-                child: SingleChildScrollView(
-                    child: Column(
-                        //mainAxisAlignment: MainAxisAlignment.center,
-                        //crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                      Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          ClipPath(
-                              clipper: profile_Clipper(),
-                              child: Container(
-                                height: 250,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                  colors: [
-                                    Colors.deepPurple,
-                                    Colors.purple.shade300
-                                  ],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                )),
-                              )),
-                          Positioned(
-                              left: 25,
-                              top: 75,
-                              child: Row(
-                                children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    icon: const Icon(
-                                      Icons.arrow_back_ios_new_outlined,
-                                      color: Colors.white,
-                                      size: 30,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 20),
-                                  SizedBox(
-                                    width: wid / 2,
-                                    child: Text(
-                                      widget.cal_sub_name.subName!,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                  ),
-                                ],
-                              ))
-                        ],
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 450.0,
+          child: Scaffold(
+              body: SingleChildScrollView(
+                  child: Container(
+                      width: 450.0,
+                      height: MediaQuery.of(context).size.height,
+                      //color: Colors.pink[100],
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage("images/background.jpg"),
+                            fit: BoxFit.cover),
                       ),
-                      build_screen()
-                    ])))),
-        floatingActionButton: ElevatedButton.icon(
-          onPressed: () {
-            showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (context) {
-                  return AlertDialog(
-                      contentPadding: EdgeInsets.all(15),
-                      content:
-                          Column(mainAxisSize: MainAxisSize.min, children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(),
-                            IconButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                icon: const Icon(Icons.close))
-                          ],
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(left: 40, right: 40),
-                          child: TextField(
-                            keyboardType: TextInputType.emailAddress,
-                            decoration: const InputDecoration(
-                                labelText: 'year',
-                                hintText: '2019',
-                                prefixIcon: Icon(Icons.text_fields),
-                                border: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)))),
-                            onChanged: (String value) {
-                              setState(() {
-                                year_name = value;
-                                if (value == "") {
-                                  year_name = null;
-                                }
-                              });
-                            },
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        private_switch(widget.app_user),
-                        const SizedBox(height: 10),
-                        TextButton(
-                            onPressed: () async {
-                              widget.cal_sub_name.allYears = "";
-                              if (!widget.app_user.isInstabook!) {
-                                Navigator.pop(context);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    duration: Duration(milliseconds: 400),
-                                    content: Text(
-                                      "Guests/Students are not allowed",
-                                      style: TextStyle(color: Colors.white),
+                      child: SingleChildScrollView(
+                          child: Column(
+                              //mainAxisAlignment: MainAxisAlignment.center,
+                              //crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                            Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                ClipPath(
+                                    clipper: profile_Clipper(),
+                                    child: Container(
+                                      height: 250,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                        colors: [
+                                          Colors.deepPurple,
+                                          Colors.purple.shade300
+                                        ],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                      )),
+                                    )),
+                                Positioned(
+                                    left: 25,
+                                    top: 75,
+                                    child: Row(
+                                      children: [
+                                        IconButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          icon: const Icon(
+                                            Icons.arrow_back_ios_new_outlined,
+                                            color: Colors.white,
+                                            size: 30,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 20),
+                                        SizedBox(
+                                          width: wid / 2,
+                                          child: Text(
+                                            widget.cal_sub_name.subName!,
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 25,
+                                                fontWeight: FontWeight.w700),
+                                          ),
+                                        ),
+                                      ],
+                                    ))
+                              ],
+                            ),
+                            build_screen()
+                          ])))),
+              floatingActionButton: ElevatedButton.icon(
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (context) {
+                        return AlertDialog(
+                            contentPadding: EdgeInsets.all(15),
+                            content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(),
+                                      IconButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          icon: const Icon(Icons.close))
+                                    ],
+                                  ),
+                                  Container(
+                                    padding:
+                                        EdgeInsets.only(left: 40, right: 40),
+                                    child: TextField(
+                                      keyboardType: TextInputType.emailAddress,
+                                      decoration: const InputDecoration(
+                                          labelText: 'year',
+                                          hintText: '2019',
+                                          prefixIcon: Icon(Icons.text_fields),
+                                          border: OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(10)))),
+                                      onChanged: (String value) {
+                                        setState(() {
+                                          year_name = value;
+                                          if (value == "") {
+                                            year_name = null;
+                                          }
+                                        });
+                                      },
                                     ),
                                   ),
-                                );
-                              } else {
-                                if (year_name == null) {
-                                  Navigator.pop(context);
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      duration: Duration(milliseconds: 400),
-                                      content: Text(
-                                        " year cant be null",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                  );
-                                } else if (widget.cal_sub_name.allYears!
-                                    .contains(year_name)) {
-                                  Navigator.pop(context);
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      duration: Duration(milliseconds: 400),
-                                      content: Text(
-                                        " sub_task was already present. plese check it out.",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                  );
-                                } else {
-                                  Navigator.pop(context);
+                                  const SizedBox(height: 10),
+                                  private_switch(widget.app_user),
+                                  const SizedBox(height: 10),
+                                  TextButton(
+                                      onPressed: () async {
+                                        widget.cal_sub_name.allYears = "";
+                                        if (!widget.app_user.isInstabook!) {
+                                          Navigator.pop(context);
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                              duration:
+                                                  Duration(milliseconds: 400),
+                                              content: Text(
+                                                "Guests/Students are not allowed",
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                            ),
+                                          );
+                                        } else {
+                                          if (year_name == null) {
+                                            Navigator.pop(context);
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                duration:
+                                                    Duration(milliseconds: 400),
+                                                content: Text(
+                                                  " year cant be null",
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                ),
+                                              ),
+                                            );
+                                          } else if (widget
+                                              .cal_sub_name.allYears!
+                                              .contains(year_name)) {
+                                            Navigator.pop(context);
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                duration:
+                                                    Duration(milliseconds: 400),
+                                                content: Text(
+                                                  " sub_task was already present. plese check it out.",
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                ),
+                                              ),
+                                            );
+                                          } else {
+                                            Navigator.pop(context);
 
-                                  List<dynamic> error =
-                                      await placemeny_servers()
-                                          .add_cal_sub_year(
-                                              widget.cal_sub_name.id.toString(),
-                                              year_name,
-                                              _lights);
+                                            List<dynamic> error =
+                                                await placemeny_servers()
+                                                    .add_cal_sub_year(
+                                                        widget.cal_sub_name.id
+                                                            .toString(),
+                                                        year_name,
+                                                        _lights);
 
-                                  if (!error[0]) {
-                                    CAL_SUB_YEARS new_sub_year =
-                                        CAL_SUB_YEARS();
-                                    new_sub_year.id = error[1];
-                                    new_sub_year.yearName = year_name;
-                                    new_sub_year.private = _lights;
-                                    new_sub_year.username =
-                                        user_min(widget.app_user);
-                                    setState(() {
-                                      sub_years.add(new_sub_year);
-                                    });
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        duration: Duration(milliseconds: 400),
-                                        content: Text(
-                                          "error occured please try again",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ),
-                                    );
-                                  }
-                                }
-                              }
-                            },
-                            child: const Center(
-                              child: Text("Add"),
-                            ))
-                      ]));
-                });
-          },
-          label: const Text("Add new year",
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-          icon: const Icon(Icons.edit, color: Colors.white),
-          style: ElevatedButton.styleFrom(primary: Colors.deepPurple),
-        ));
+                                            if (!error[0]) {
+                                              CAL_SUB_YEARS new_sub_year =
+                                                  CAL_SUB_YEARS();
+                                              new_sub_year.id = error[1];
+                                              new_sub_year.yearName = year_name;
+                                              new_sub_year.private = _lights;
+                                              new_sub_year.username =
+                                                  user_min(widget.app_user);
+                                              setState(() {
+                                                sub_years.add(new_sub_year);
+                                              });
+                                            } else {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                const SnackBar(
+                                                  duration: Duration(
+                                                      milliseconds: 400),
+                                                  content: Text(
+                                                    "error occured please try again",
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                          }
+                                        }
+                                      },
+                                      child: const Center(
+                                        child: Text("Add"),
+                                      ))
+                                ]));
+                      });
+                },
+                label: const Text("Add new year",
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold)),
+                icon: const Icon(Icons.edit, color: Colors.white),
+                style: ElevatedButton.styleFrom(primary: Colors.deepPurple),
+              )),
+        ),
+      ],
+    );
   }
 
   build_screen() {
-    var wid = MediaQuery.of(context).size.width;
+    var wid = 450.0;
     return loaded_data == false
         ? Center(
             child: Container(
@@ -1433,231 +1481,259 @@ class _yearFilesState extends State<yearFiles> {
 
   @override
   Widget build(BuildContext context) {
-    var wid = MediaQuery.of(context).size.width;
+    var wid = 450.0;
     widget.cal_sub_files = sub_files;
     widget.cal_sub_files.sort((a, b) => a.fileName!.compareTo(b.fileName!));
-    return Scaffold(
-      body: SingleChildScrollView(
-          child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              //color: Colors.pink[100],
-              decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("images/background.jpg"),
-                      fit: BoxFit.cover)),
-              child: SingleChildScrollView(
-                  child: Column(
-                      //mainAxisAlignment: MainAxisAlignment.center,
-                      //crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                    Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        ClipPath(
-                            clipper: profile_Clipper(),
-                            child: Container(
-                              height: 250,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                colors: [
-                                  Colors.deepPurple,
-                                  Colors.purple.shade300
-                                ],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              )),
-                            )),
-                        Positioned(
-                            left: 25,
-                            top: 75,
-                            child: Row(
-                              children: [
-                                IconButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  icon: const Icon(
-                                    Icons.arrow_back_ios_new_outlined,
-                                    color: Colors.white,
-                                    size: 30,
-                                  ),
-                                ),
-                                const SizedBox(width: 20),
-                                SizedBox(
-                                    width: wid / 2,
-                                    child: Text(
-                                      widget.sub_year.yearName!,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.w700),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 450.0,
+          child: Scaffold(
+            body: SingleChildScrollView(
+                child: Container(
+                    width: 450.0,
+                    height: MediaQuery.of(context).size.height,
+                    //color: Colors.pink[100],
+                    decoration: const BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage("images/background.jpg"),
+                            fit: BoxFit.cover)),
+                    child: SingleChildScrollView(
+                        child: Column(
+                            //mainAxisAlignment: MainAxisAlignment.center,
+                            //crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                          Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              ClipPath(
+                                  clipper: profile_Clipper(),
+                                  child: Container(
+                                    height: 250,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                      colors: [
+                                        Colors.deepPurple,
+                                        Colors.purple.shade300
+                                      ],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
                                     )),
-                              ],
-                            ))
-                      ],
-                    ),
-                    !loaded_data
-                        ? const Center(
-                            child: CircularProgressIndicator(),
-                          )
-                        : Container(
-                            margin: const EdgeInsets.all(5),
-                            child: Column(
-                              children: [
-                                SingleChildScrollView(
-                                    child: ListView.builder(
-                                        itemCount: widget.cal_sub_files.length,
-                                        shrinkWrap: true,
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        padding:
-                                            const EdgeInsets.only(bottom: 10),
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          if (widget.app_user.email ==
-                                              widget.sub_year.username!.email) {
-                                            return build_screen(index);
-                                          } else if (widget.sub_year.private!) {
-                                            if (widget.cal_sub_files[index]
-                                                        .username!.email ==
-                                                    widget.app_user.email ||
-                                                widget.cal_sub_files[index]
-                                                        .username!.email ==
+                                  )),
+                              Positioned(
+                                  left: 25,
+                                  top: 75,
+                                  child: Row(
+                                    children: [
+                                      IconButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        icon: const Icon(
+                                          Icons.arrow_back_ios_new_outlined,
+                                          color: Colors.white,
+                                          size: 30,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 20),
+                                      SizedBox(
+                                          width: wid / 2,
+                                          child: Text(
+                                            widget.sub_year.yearName!,
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 25,
+                                                fontWeight: FontWeight.w700),
+                                          )),
+                                    ],
+                                  ))
+                            ],
+                          ),
+                          !loaded_data
+                              ? const Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : Container(
+                                  margin: const EdgeInsets.all(5),
+                                  child: Column(
+                                    children: [
+                                      SingleChildScrollView(
+                                          child: ListView.builder(
+                                              itemCount:
+                                                  widget.cal_sub_files.length,
+                                              shrinkWrap: true,
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 10),
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                if (widget.app_user.email ==
                                                     widget.sub_year.username!
                                                         .email) {
-                                              return build_screen(index);
-                                            } else {
-                                              return Container();
-                                            }
-                                          } else {
-                                            return build_screen(index);
-                                          }
-                                          //return Container();
-                                        }))
-                              ],
-                            ),
-                          )
-                  ])))),
-      floatingActionButton: ElevatedButton.icon(
-        onPressed: () async {
-          if (widget.app_user.email == "guest@nitc.ac.in") {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                duration: Duration(milliseconds: 400),
-                content: Text(
-                  "Guests are not allowed",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            );
-          } else {
-            showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (context) {
-                  return AlertDialog(
-                    contentPadding: EdgeInsets.all(15),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(),
-                                IconButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    icon: const Icon(Icons.close))
-                              ],
-                            ),
-                            const SizedBox(height: 10),
-                            IconButton(
-                                onPressed: () async {
-                                  final ImagePicker _picker = ImagePicker();
-                                  final XFile? image1 = await _picker.pickImage(
-                                      source: ImageSource.gallery,
-                                      imageQuality: 35);
-                                  //final bytes = await File(image1!.path).readAsBytes();
-                                  setState(() {
-                                    file = File(image1!.path);
-                                    file_type = "1";
-                                    //final img.Image image = img.decodeImage(bytes)!;
-                                  });
-                                  Navigator.pop(context);
-                                  uploading();
-                                },
-                                icon: const Icon(Icons.photo_library_outlined,
-                                    size: 20)),
-                            IconButton(
-                                onPressed: () async {
-                                  final ImagePicker _picker = ImagePicker();
-                                  final image1 = await _picker.pickVideo(
-                                    source: ImageSource.gallery,
-                                  );
-
-                                  //final bytes = await File(image1!.path).readAsBytes();
-                                  setState(() {
-                                    file = File(image1!.path);
-                                    file_type = "2";
-                                    //final img.Image image = img.decodeImage(bytes)!;
-                                  });
-                                  Navigator.pop(context);
-                                  uploading();
-                                },
-                                icon: const Icon(
-                                  Icons.video_collection_outlined,
-                                  size: 20,
-                                )),
-                            IconButton(
-                                onPressed: () async {
-                                  final result =
-                                      await FilePicker.platform.pickFiles(
-                                    type: FileType.custom,
-                                    allowedExtensions: ['pdf'],
-                                  );
-
-                                  setState(() {
-                                    file = File(result!.paths.first ?? '');
-                                    file_type = "3";
-                                    //final img.Image image = img.decodeImage(bytes)!;
-                                  });
-                                  Navigator.pop(context);
-                                  uploading();
-                                },
-                                icon: const Icon(Icons.file_copy_sharp,
-                                    size: 20)),
-                          ],
-                        )
-                      ],
+                                                  return build_screen(index);
+                                                } else if (widget
+                                                    .sub_year.private!) {
+                                                  if (widget
+                                                              .cal_sub_files[
+                                                                  index]
+                                                              .username!
+                                                              .email ==
+                                                          widget
+                                                              .app_user.email ||
+                                                      widget
+                                                              .cal_sub_files[
+                                                                  index]
+                                                              .username!
+                                                              .email ==
+                                                          widget
+                                                              .sub_year
+                                                              .username!
+                                                              .email) {
+                                                    return build_screen(index);
+                                                  } else {
+                                                    return Container();
+                                                  }
+                                                } else {
+                                                  return build_screen(index);
+                                                }
+                                                //return Container();
+                                              }))
+                                    ],
+                                  ),
+                                )
+                        ])))),
+            floatingActionButton: ElevatedButton.icon(
+              onPressed: () async {
+                if (widget.app_user.email == "guest@nitc.ac.in") {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      duration: Duration(milliseconds: 400),
+                      content: Text(
+                        "Guests are not allowed",
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   );
-                });
-          }
-        },
-        label: widget.sub_year == "Placements"
-            ? const Text("Add new review",
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold))
-            : const Text("Add new file",
-                style: TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.bold)),
-        icon: const Icon(Icons.edit, color: Colors.white),
-        style: ElevatedButton.styleFrom(primary: Colors.deepPurple),
-      ),
+                } else {
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (context) {
+                        return AlertDialog(
+                          contentPadding: EdgeInsets.all(15),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const SizedBox(height: 20),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(),
+                                      IconButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          icon: const Icon(Icons.close))
+                                    ],
+                                  ),
+                                  const SizedBox(height: 10),
+                                  IconButton(
+                                      onPressed: () async {
+                                        final ImagePicker _picker =
+                                            ImagePicker();
+                                        final XFile? image1 =
+                                            await _picker.pickImage(
+                                                source: ImageSource.gallery,
+                                                imageQuality: 35);
+                                        //final bytes = await File(image1!.path).readAsBytes();
+                                        setState(() {
+                                          file = File(image1!.path);
+                                          file_type = "1";
+                                          //final img.Image image = img.decodeImage(bytes)!;
+                                        });
+                                        Navigator.pop(context);
+                                        uploading();
+                                      },
+                                      icon: const Icon(
+                                          Icons.photo_library_outlined,
+                                          size: 20)),
+                                  IconButton(
+                                      onPressed: () async {
+                                        final ImagePicker _picker =
+                                            ImagePicker();
+                                        final image1 = await _picker.pickVideo(
+                                          source: ImageSource.gallery,
+                                        );
+
+                                        //final bytes = await File(image1!.path).readAsBytes();
+                                        setState(() {
+                                          file = File(image1!.path);
+                                          file_type = "2";
+                                          //final img.Image image = img.decodeImage(bytes)!;
+                                        });
+                                        Navigator.pop(context);
+                                        uploading();
+                                      },
+                                      icon: const Icon(
+                                        Icons.video_collection_outlined,
+                                        size: 20,
+                                      )),
+                                  IconButton(
+                                      onPressed: () async {
+                                        final result =
+                                            await FilePicker.platform.pickFiles(
+                                          type: FileType.custom,
+                                          allowedExtensions: ['pdf'],
+                                        );
+
+                                        setState(() {
+                                          file =
+                                              File(result!.paths.first ?? '');
+                                          file_type = "3";
+                                          //final img.Image image = img.decodeImage(bytes)!;
+                                        });
+                                        Navigator.pop(context);
+                                        uploading();
+                                      },
+                                      icon: const Icon(Icons.file_copy_sharp,
+                                          size: 20)),
+                                ],
+                              )
+                            ],
+                          ),
+                        );
+                      });
+                }
+              },
+              label: widget.sub_year == "Placements"
+                  ? const Text("Add new review",
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold))
+                  : const Text("Add new file",
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold)),
+              icon: const Icon(Icons.edit, color: Colors.white),
+              style: ElevatedButton.styleFrom(primary: Colors.deepPurple),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
   build_screen(int index) {
-    var wid = MediaQuery.of(context).size.width;
+    var wid = 450.0;
     return GestureDetector(
       onTap: () {
         if (widget.app_user.email == "guest@nitc.ac.in") {

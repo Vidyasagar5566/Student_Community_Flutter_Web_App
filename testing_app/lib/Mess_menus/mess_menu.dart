@@ -275,70 +275,79 @@ class messMenu extends StatefulWidget {
 class _messMenuState extends State<messMenu> {
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-        initialIndex: today.weekday - 1,
-        length: 7,
-        child: Scaffold(
-            appBar: AppBar(
-                leading: const BackButton(
-                  color: Colors.blue, // <-- SEE HERE
-                ),
-                centerTitle: false,
-                title: const Text("Mess Menu",
-                    style: TextStyle(color: Colors.black)),
-                actions: [
-                  DropdownButton<String>(
-                      value: widget.domain,
-                      underline: Container(),
-                      elevation: 0,
-                      items: domains_list
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(
-                            value,
-                            style: TextStyle(fontSize: 10),
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          widget.domain = value!;
-                        });
-                      })
-                ],
-                backgroundColor: Colors.white70,
-                bottom: TabBar(
-                  indicator: BoxDecoration(
-                      borderRadius: BorderRadius.circular(21), // Creates border
-                      color: Colors.grey),
-                  indicatorColor: Colors.grey,
-                  isScrollable: true,
-                  labelColor: Colors.black,
-                  tabs: tabs(),
-                )),
-            body: FutureBuilder<List<MESS_LIST>>(
-              future:
-                  mess_menu_servers().get_mess_list(domains1[widget.domain]!),
-              builder: (ctx, AsyncSnapshot snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  if (snapshot.hasError) {
-                    return Center(
-                      child: Text(
-                        '${snapshot.error} occurred',
-                        style: TextStyle(fontSize: 18),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 450.0,
+          child: DefaultTabController(
+              initialIndex: today.weekday - 1,
+              length: 7,
+              child: Scaffold(
+                  appBar: AppBar(
+                      leading: const BackButton(
+                        color: Colors.blue, // <-- SEE HERE
                       ),
-                    );
-                  } else if (snapshot.hasData) {
-                    List<MESS_LIST> mess_list = snapshot.data;
-                    return _buildListView(mess_list);
-                  }
-                }
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              },
-            )));
+                      centerTitle: false,
+                      title: const Text("Mess Menu",
+                          style: TextStyle(color: Colors.black)),
+                      actions: [
+                        DropdownButton<String>(
+                            value: widget.domain,
+                            underline: Container(),
+                            elevation: 0,
+                            items: domains_list
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(
+                                  value,
+                                  style: TextStyle(fontSize: 10),
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                widget.domain = value!;
+                              });
+                            })
+                      ],
+                      backgroundColor: Colors.white70,
+                      bottom: TabBar(
+                        indicator: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.circular(21), // Creates border
+                            color: Colors.grey),
+                        indicatorColor: Colors.grey,
+                        isScrollable: true,
+                        labelColor: Colors.black,
+                        tabs: tabs(),
+                      )),
+                  body: FutureBuilder<List<MESS_LIST>>(
+                    future: mess_menu_servers()
+                        .get_mess_list(domains1[widget.domain]!),
+                    builder: (ctx, AsyncSnapshot snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        if (snapshot.hasError) {
+                          return Center(
+                            child: Text(
+                              '${snapshot.error} occurred',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          );
+                        } else if (snapshot.hasData) {
+                          List<MESS_LIST> mess_list = snapshot.data;
+                          return _buildListView(mess_list);
+                        }
+                      }
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    },
+                  ))),
+        ),
+      ],
+    );
   }
 
   Widget _buildListView(List<MESS_LIST> mess_list) {

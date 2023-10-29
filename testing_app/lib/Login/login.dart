@@ -7,7 +7,6 @@ import '/first_page.dart';
 import '../Circular_designs/cure_clip.dart';
 import '../Circular_designs/circular indicator.dart';
 //import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-import 'dart:io';
 import 'Servers.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -18,9 +17,7 @@ String google_email = "";
 String imageUrl = "";
 
 Future<String> signInWithGoogle() async {
-  await Firebase.initializeApp();
   final GoogleSignIn googleuser = GoogleSignIn();
-
   final GoogleSignInAccount? googleSignInAccount = await googleuser.signIn();
 
   final GoogleSignInAuthentication googleSignInAuthentication =
@@ -299,7 +296,6 @@ class _loginpageState extends State<loginpage> {
                         onPressed: () async {
                           await signOutGoogle();
                           String google_email = "";
-
                           google_email = await signInWithGoogle();
 
                           Navigator.of(context).pushAndRemoveUntil(

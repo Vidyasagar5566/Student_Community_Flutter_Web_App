@@ -21,15 +21,15 @@ class _NavDrawerState extends State<NavDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      width: 200,
+      surfaceTintColor: Colors.white,
       shadowColor: Colors.white,
       backgroundColor: Colors.white,
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.indigo[800],
-            ),
+            decoration: BoxDecoration(color: Colors.white),
             child: Column(
               children: [
                 CircleAvatar(

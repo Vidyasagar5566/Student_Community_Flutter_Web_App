@@ -22,89 +22,99 @@ class _search_barState extends State<search_bar> {
   String username_match = "";
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.deepPurple, Colors.purple.shade300],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 450.0,
+          child: Scaffold(
+            appBar: AppBar(
+              flexibleSpace: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.deepPurple, Colors.purple.shade300],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
+              ),
+              iconTheme: IconThemeData(color: Colors.black),
+              title: TextField(
+                //controller: ,
+                autofocus: true,
+                style: const TextStyle(color: Colors.white),
+                cursorColor: Colors.white,
+                decoration: const InputDecoration(
+                    hintText: 'Search...',
+                    hintStyle: TextStyle(color: Colors.white54),
+                    border: InputBorder.none),
+                onChanged: (value) {
+                  setState(() {
+                    username_match = value;
+                  });
+                },
+              ),
+              actions: [
+                DropdownButton<String>(
+                    value: widget.domain,
+                    underline: Container(),
+                    iconEnabledColor: Colors.white,
+                    elevation: 0,
+                    items: domains_list
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(fontSize: 10),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        widget.domain = value!;
+                      });
+                    })
+              ],
+              backgroundColor: Colors.white70,
+            ),
+            body: FutureBuilder<List<SmallUsername>>(
+              future: messanger_servers().get_searched_user_list(
+                  username_match, domains1[widget.domain]!, 0),
+              builder: (ctx, AsyncSnapshot snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        '${snapshot.error} occurred',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    );
+                  } else if (snapshot.hasData) {
+                    List<SmallUsername> users_list = snapshot.data;
+                    if (users_list.isEmpty) {
+                      return Container(
+                          margin: EdgeInsets.all(30),
+                          padding: EdgeInsets.all(30),
+                          child: const Text(
+                              "No Users starting with this Name/Email",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w500, fontSize: 24)));
+                    } else {
+                      all_search_users = users_list;
+                      return user_list_display(users_list, widget.app_user,
+                          username_match, widget.domain);
+                    }
+                  }
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
             ),
           ),
         ),
-        iconTheme: IconThemeData(color: Colors.black),
-        title: TextField(
-          //controller: ,
-          autofocus: true,
-          style: const TextStyle(color: Colors.white),
-          cursorColor: Colors.white,
-          decoration: const InputDecoration(
-              hintText: 'Search...',
-              hintStyle: TextStyle(color: Colors.white54),
-              border: InputBorder.none),
-          onChanged: (value) {
-            setState(() {
-              username_match = value;
-            });
-          },
-        ),
-        actions: [
-          DropdownButton<String>(
-              value: widget.domain,
-              underline: Container(),
-              iconEnabledColor: Colors.white,
-              elevation: 0,
-              items: domains_list.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(
-                    value,
-                    style: TextStyle(fontSize: 10),
-                  ),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  widget.domain = value!;
-                });
-              })
-        ],
-        backgroundColor: Colors.white70,
-      ),
-      body: FutureBuilder<List<SmallUsername>>(
-        future: messanger_servers().get_searched_user_list(
-            username_match, domains1[widget.domain]!, 0),
-        builder: (ctx, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasError) {
-              return Center(
-                child: Text(
-                  '${snapshot.error} occurred',
-                  style: TextStyle(fontSize: 18),
-                ),
-              );
-            } else if (snapshot.hasData) {
-              List<SmallUsername> users_list = snapshot.data;
-              if (users_list.isEmpty) {
-                return Container(
-                    margin: EdgeInsets.all(30),
-                    padding: EdgeInsets.all(30),
-                    child: const Text("No Users starting with this Name/Email",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 24)));
-              } else {
-                all_search_users = users_list;
-                return user_list_display(
-                    users_list, widget.app_user, username_match, widget.domain);
-              }
-            }
-          }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-      ),
+      ],
     );
   }
 }
@@ -146,7 +156,7 @@ class _user_list_displayState extends State<user_list_display> {
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
+    var width = 450.0;
     return SingleChildScrollView(
       child: _circularind == true
           ? Column(
@@ -200,7 +210,7 @@ class _user_list_displayState extends State<user_list_display> {
   }
 
   Widget _buildLoadingScreen(SmallUsername search_user, int index) {
-    var width = MediaQuery.of(context).size.width;
+    var width = 450.0;
     return GestureDetector(
       onTap: () async {
         Navigator.of(context)

@@ -102,7 +102,7 @@ class _activitieswidget1State extends State<activitieswidget1> {
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
+    var width = 450.0;
     var height = MediaQuery.of(context).size.height;
     return widget.event_list.isEmpty
         ? Container(
@@ -206,7 +206,7 @@ class _single_eventState extends State<single_event> {
   @override
   Widget build(BuildContext context) {
     EVENT_LIST event = widget.event;
-    var width = MediaQuery.of(context).size.width;
+    var width = 450.0;
     SmallUsername user = widget.event.username!;
     List<String> eventUpdates;
     eventUpdates = event.eventUpdate.toString().split('`');
@@ -447,386 +447,423 @@ class _event_photowidgetState extends State<event_photowidget> {
     EVENT_LIST event = widget.event;
     String deleteError = "";
     final Username appUser = widget.app_user;
-    var width = MediaQuery.of(context).size.width;
-    return Scaffold(
-        appBar: AppBar(
-          leading: const BackButton(
-            color: Colors.blue, // <-- SEE HERE
-          ),
-          centerTitle: true,
-          title: const Text(
-            "NIT CALICUT",
-            //"Event name",
-            style: TextStyle(color: Colors.black),
-          ),
-          backgroundColor: Colors.white70,
-        ),
-        body: Container(
-          color: Colors.indigo,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  width: double.infinity,
-                  margin: EdgeInsets.all(15),
-                  padding: EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(14),
-                    color: Colors.white,
-                  ),
-                  child: Center(
-                    child: Text(
-                      utf8convert(widget.event.title!),
-                      //"Description",
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 18),
-                    ),
-                  ),
+    var width = 450.0;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 450.0,
+          child: Scaffold(
+              appBar: AppBar(
+                leading: const BackButton(
+                  color: Colors.blue, // <-- SEE HERE
                 ),
-                Container(
-                  width: double.infinity,
-                  margin: EdgeInsets.all(15),
-                  padding: EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(14),
-                    color: Colors.white,
-                  ),
-                  child: //Link
-                      Text(
-                    utf8convert(widget.event.description!),
-                    //"Description",
-                    //style: TextStyle(fontWeight: FontWeight.w400, fontSize: 18),
-                  ),
+                centerTitle: true,
+                title: const Text(
+                  "NIT CALICUT",
+                  //"Event name",
+                  style: TextStyle(color: Colors.black),
                 ),
-                Container(
-                    width: double.infinity,
-                    margin: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.white),
-                    child: Column(
-                      children: [
-                        const Text("image/video",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 20,
-                                color: Colors.black)),
-                        const SizedBox(height: 10),
-                        event.imgRatio == 2
-                            ? GestureDetector(
-                                onTap: () {
-                                  widget._videoPlayerController.play();
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (BuildContext context) {
-                                    return video_display(
-                                        event, widget._videoPlayerController);
-                                  }));
-                                },
-                                child: AspectRatio(
-                                  aspectRatio: widget
-                                      ._videoPlayerController.value.aspectRatio,
-                                  child: Stack(
-                                    alignment: Alignment.bottomCenter,
-                                    children: <Widget>[
-                                      VideoPlayer(
-                                          widget._videoPlayerController),
-                                      ClosedCaption(text: null),
-                                      _showController == true
-                                          ? Center(
-                                              child: InkWell(
-                                              child: Icon(
-                                                widget._videoPlayerController
-                                                        .value.isPlaying
-                                                    ? Icons.pause_circle_outline
-                                                    : Icons.play_circle_outline,
-                                                color: Colors.blue,
-                                                size: 60,
-                                              ),
-                                              onTap: () {
-                                                widget._videoPlayerController
-                                                    .play();
-                                                Navigator.of(context).push(
-                                                    MaterialPageRoute(builder:
-                                                        (BuildContext context) {
-                                                  return video_display(
-                                                      event,
+                backgroundColor: Colors.white70,
+              ),
+              body: Container(
+                color: Colors.indigo,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        margin: EdgeInsets.all(15),
+                        padding: EdgeInsets.all(15),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(14),
+                          color: Colors.white,
+                        ),
+                        child: Center(
+                          child: Text(
+                            utf8convert(widget.event.title!),
+                            //"Description",
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: double.infinity,
+                        margin: EdgeInsets.all(15),
+                        padding: EdgeInsets.all(15),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(14),
+                          color: Colors.white,
+                        ),
+                        child: //Link
+                            Text(
+                          utf8convert(widget.event.description!),
+                          //"Description",
+                          //style: TextStyle(fontWeight: FontWeight.w400, fontSize: 18),
+                        ),
+                      ),
+                      Container(
+                          width: double.infinity,
+                          margin: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.white),
+                          child: Column(
+                            children: [
+                              const Text("image/video",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 20,
+                                      color: Colors.black)),
+                              const SizedBox(height: 10),
+                              event.imgRatio == 2
+                                  ? GestureDetector(
+                                      onTap: () {
+                                        widget._videoPlayerController.play();
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(builder:
+                                                (BuildContext context) {
+                                          return video_display(event,
+                                              widget._videoPlayerController);
+                                        }));
+                                      },
+                                      child: AspectRatio(
+                                        aspectRatio: widget
+                                            ._videoPlayerController
+                                            .value
+                                            .aspectRatio,
+                                        child: Stack(
+                                          alignment: Alignment.bottomCenter,
+                                          children: <Widget>[
+                                            VideoPlayer(
+                                                widget._videoPlayerController),
+                                            ClosedCaption(text: null),
+                                            _showController == true
+                                                ? Center(
+                                                    child: InkWell(
+                                                    child: Icon(
+                                                      widget._videoPlayerController
+                                                              .value.isPlaying
+                                                          ? Icons
+                                                              .pause_circle_outline
+                                                          : Icons
+                                                              .play_circle_outline,
+                                                      color: Colors.blue,
+                                                      size: 60,
+                                                    ),
+                                                    onTap: () {
                                                       widget
-                                                          ._videoPlayerController);
-                                                }));
-                                              },
-                                            ))
-                                          : Container(),
-                                      // Here you can also add Overlay capacities
-                                      VideoProgressIndicator(
-                                        widget._videoPlayerController,
-                                        allowScrubbing: true,
-                                        padding: EdgeInsets.all(3),
-                                        colors: const VideoProgressColors(
-                                          backgroundColor: Colors.black,
-                                          playedColor: Colors.white,
-                                          bufferedColor: Colors.white70,
+                                                          ._videoPlayerController
+                                                          .play();
+                                                      Navigator.of(context).push(
+                                                          MaterialPageRoute(
+                                                              builder:
+                                                                  (BuildContext
+                                                                      context) {
+                                                        return video_display(
+                                                            event,
+                                                            widget
+                                                                ._videoPlayerController);
+                                                      }));
+                                                    },
+                                                  ))
+                                                : Container(),
+                                            // Here you can also add Overlay capacities
+                                            VideoProgressIndicator(
+                                              widget._videoPlayerController,
+                                              allowScrubbing: true,
+                                              padding: EdgeInsets.all(3),
+                                              colors: const VideoProgressColors(
+                                                backgroundColor: Colors.black,
+                                                playedColor: Colors.white,
+                                                bufferedColor: Colors.white70,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            : Center(
-                                child: Container(
-                                  height: width,
-                                  width: width,
-                                  child: Image.network(event.eventImg!),
-                                ),
-                              ),
-                        const SizedBox(height: 10),
-                        (appUser.isSuperuser! ||
-                                widget.app_user.email ==
-                                    widget.event.username!.email)
-                            ? Center(
-                                child: Column(
-                                  children: [
-                                    IconButton(
-                                      onPressed: () {
-                                        showDialog(
-                                            context: context,
-                                            builder: (context) {
-                                              return AlertDialog(
-                                                contentPadding:
-                                                    EdgeInsets.all(15),
-                                                content: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        Container(),
-                                                        IconButton(
-                                                            onPressed: () {
-                                                              Navigator.pop(
-                                                                  context);
-                                                            },
-                                                            icon: const Icon(
-                                                                Icons.close))
-                                                      ],
-                                                    ),
-                                                    const SizedBox(height: 20),
-                                                    const Center(
-                                                        child: Text(
-                                                            "Are you sure do you want to delete this?",
-                                                            style: TextStyle(
-                                                                fontSize: 14,
-                                                                color: Colors
-                                                                    .black,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold))),
-                                                    const SizedBox(height: 10),
-                                                    Container(
-                                                      margin:
-                                                          const EdgeInsets.all(
-                                                              30),
-                                                      color: Colors.blue[900],
-                                                      child: OutlinedButton(
-                                                          onPressed: () async {
-                                                            bool error =
-                                                                await activity_servers()
-                                                                    .delete_event(
-                                                                        widget
-                                                                            .event
-                                                                            .id!);
-                                                            if (!error) {
-                                                              Navigator.pop(
-                                                                  context);
-                                                              Navigator.of(context).pushAndRemoveUntil(
-                                                                  MaterialPageRoute(builder:
-                                                                      (BuildContext
-                                                                          context) {
-                                                                return firstpage(
-                                                                    2,
-                                                                    widget
-                                                                        .app_user);
-                                                              }),
-                                                                  (Route<dynamic>
-                                                                          route) =>
-                                                                      false);
-                                                            } else {
-                                                              setState(() {
-                                                                deleteError =
-                                                                    "check your connection";
-                                                              });
-                                                            }
-                                                          },
-                                                          child: const Center(
-                                                              child: Text(
-                                                            "Delete",
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white),
-                                                          ))),
-                                                    ),
-                                                    const SizedBox(height: 10),
-                                                    deleteError != ""
-                                                        ? Center(
-                                                            child: Text(
-                                                                deleteError,
-                                                                style: const TextStyle(
-                                                                    color: Color
-                                                                        .fromARGB(
-                                                                            255,
-                                                                            138,
-                                                                            79,
-                                                                            79))),
-                                                          )
-                                                        : Container()
-                                                  ],
-                                                ),
-                                              );
-                                            });
-                                      },
-                                      icon: const Icon(
-                                        Icons.delete,
-                                        size: 31,
-                                        color: Colors.blue,
+                                    )
+                                  : Center(
+                                      child: Container(
+                                        height: width,
+                                        width: width,
+                                        child: Image.network(event.eventImg!),
                                       ),
                                     ),
-                                    const SizedBox(height: 10),
-                                    (widget.app_user.username ==
-                                                widget
-                                                    .event.username!.username ||
-                                            widget.app_user.isSuperuser!)
-                                        ? Column(
-                                            children: [
-                                              const Text(
-                                                "Delete the event?",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black),
-                                              ),
-                                              const SizedBox(height: 10),
-                                              Container(
-                                                padding: EdgeInsets.only(
-                                                    left: 40, right: 40),
-                                                child: TextFormField(
-                                                  controller: _controller1,
-                                                  keyboardType:
-                                                      TextInputType.multiline,
-                                                  minLines:
-                                                      4, //Normal textInputField will be displayed
-                                                  maxLines: 10,
-                                                  decoration:
-                                                      const InputDecoration(
-                                                    labelText: 'Description',
-                                                    hintText: 'everyone .....',
-                                                    prefixIcon:
-                                                        Icon(Icons.text_fields),
-                                                    border: OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    10))),
-                                                  ),
-                                                  onChanged: (String value) {
-                                                    setState(() {
-                                                      update_text = value;
-                                                      if (update_text == "") {
-                                                        update_text = null;
-                                                      }
-                                                    });
-                                                  },
-                                                  validator: (value) {
-                                                    return value!.isEmpty
-                                                        ? 'please enter password'
-                                                        : null;
-                                                  },
-                                                ),
-                                              ),
-                                              const SizedBox(height: 10),
-                                              update_text != null
-                                                  ? TextButton(
-                                                      onPressed: () async {
-                                                        String temp =
-                                                            update_text;
-                                                        update_text = null;
-                                                        setState(() {
-                                                          _controller1.clear();
-                                                          widget.event_updates
-                                                              .insert(0,
-                                                                  '&&&' + temp);
-                                                        });
-                                                        bool error =
-                                                            await activity_servers()
-                                                                .update_event(
-                                                                    widget.event
-                                                                        .id!,
-                                                                    temp);
-                                                        if (!error) {
-                                                          bool error1 = await servers()
-                                                              .send_notifications(
-                                                                  "Event :  update",
-                                                                  update_text,
-                                                                  4);
-                                                        }
-                                                      },
-                                                      child: const Text(
-                                                        "Update",
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: 16,
-                                                            color: Colors.blue),
-                                                      ))
-                                                  : Container()
-                                            ],
-                                          )
-                                        : Container()
-                                  ],
+                              const SizedBox(height: 10),
+                              (appUser.isSuperuser! ||
+                                      widget.app_user.email ==
+                                          widget.event.username!.email)
+                                  ? Center(
+                                      child: Column(
+                                        children: [
+                                          IconButton(
+                                            onPressed: () {
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return AlertDialog(
+                                                      contentPadding:
+                                                          EdgeInsets.all(15),
+                                                      content: Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Container(),
+                                                              IconButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                  },
+                                                                  icon: const Icon(
+                                                                      Icons
+                                                                          .close))
+                                                            ],
+                                                          ),
+                                                          const SizedBox(
+                                                              height: 20),
+                                                          const Center(
+                                                              child: Text(
+                                                                  "Are you sure do you want to delete this?",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          14,
+                                                                      color: Colors
+                                                                          .black,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold))),
+                                                          const SizedBox(
+                                                              height: 10),
+                                                          Container(
+                                                            margin:
+                                                                const EdgeInsets
+                                                                    .all(30),
+                                                            color: Colors
+                                                                .blue[900],
+                                                            child: OutlinedButton(
+                                                                onPressed: () async {
+                                                                  bool error = await activity_servers()
+                                                                      .delete_event(widget
+                                                                          .event
+                                                                          .id!);
+                                                                  if (!error) {
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                    Navigator.of(context).pushAndRemoveUntil(
+                                                                        MaterialPageRoute(
+                                                                            builder: (BuildContext
+                                                                                context) {
+                                                                      return firstpage(
+                                                                          2,
+                                                                          widget
+                                                                              .app_user);
+                                                                    }),
+                                                                        (Route<dynamic>
+                                                                                route) =>
+                                                                            false);
+                                                                  } else {
+                                                                    setState(
+                                                                        () {
+                                                                      deleteError =
+                                                                          "check your connection";
+                                                                    });
+                                                                  }
+                                                                },
+                                                                child: const Center(
+                                                                    child: Text(
+                                                                  "Delete",
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white),
+                                                                ))),
+                                                          ),
+                                                          const SizedBox(
+                                                              height: 10),
+                                                          deleteError != ""
+                                                              ? Center(
+                                                                  child: Text(
+                                                                      deleteError,
+                                                                      style: const TextStyle(
+                                                                          color: Color.fromARGB(
+                                                                              255,
+                                                                              138,
+                                                                              79,
+                                                                              79))),
+                                                                )
+                                                              : Container()
+                                                        ],
+                                                      ),
+                                                    );
+                                                  });
+                                            },
+                                            icon: const Icon(
+                                              Icons.delete,
+                                              size: 31,
+                                              color: Colors.blue,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          (widget.app_user.username ==
+                                                      widget.event.username!
+                                                          .username ||
+                                                  widget.app_user.isSuperuser!)
+                                              ? Column(
+                                                  children: [
+                                                    const Text(
+                                                      "Delete the event?",
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: Colors.black),
+                                                    ),
+                                                    const SizedBox(height: 10),
+                                                    Container(
+                                                      padding: EdgeInsets.only(
+                                                          left: 40, right: 40),
+                                                      child: TextFormField(
+                                                        controller:
+                                                            _controller1,
+                                                        keyboardType:
+                                                            TextInputType
+                                                                .multiline,
+                                                        minLines:
+                                                            4, //Normal textInputField will be displayed
+                                                        maxLines: 10,
+                                                        decoration:
+                                                            const InputDecoration(
+                                                          labelText:
+                                                              'Description',
+                                                          hintText:
+                                                              'everyone .....',
+                                                          prefixIcon: Icon(Icons
+                                                              .text_fields),
+                                                          border: OutlineInputBorder(
+                                                              borderRadius: BorderRadius
+                                                                  .all(Radius
+                                                                      .circular(
+                                                                          10))),
+                                                        ),
+                                                        onChanged:
+                                                            (String value) {
+                                                          setState(() {
+                                                            update_text = value;
+                                                            if (update_text ==
+                                                                "") {
+                                                              update_text =
+                                                                  null;
+                                                            }
+                                                          });
+                                                        },
+                                                        validator: (value) {
+                                                          return value!.isEmpty
+                                                              ? 'please enter password'
+                                                              : null;
+                                                        },
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 10),
+                                                    update_text != null
+                                                        ? TextButton(
+                                                            onPressed:
+                                                                () async {
+                                                              String temp =
+                                                                  update_text;
+                                                              update_text =
+                                                                  null;
+                                                              setState(() {
+                                                                _controller1
+                                                                    .clear();
+                                                                widget
+                                                                    .event_updates
+                                                                    .insert(
+                                                                        0,
+                                                                        '&&&' +
+                                                                            temp);
+                                                              });
+                                                              bool error = await activity_servers()
+                                                                  .update_event(
+                                                                      widget
+                                                                          .event
+                                                                          .id!,
+                                                                      temp);
+                                                              if (!error) {
+                                                                bool error1 = await servers()
+                                                                    .send_notifications(
+                                                                        "Event :  update",
+                                                                        update_text,
+                                                                        4);
+                                                              }
+                                                            },
+                                                            child: const Text(
+                                                              "Update",
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize: 16,
+                                                                  color: Colors
+                                                                      .blue),
+                                                            ))
+                                                        : Container()
+                                                  ],
+                                                )
+                                              : Container()
+                                        ],
+                                      ),
+                                    )
+                                  : Container()
+                            ],
+                          )),
+                      const SizedBox(height: 10),
+                      const Center(
+                          child: Text("Updates",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 18))),
+                      Container(
+                        child: ListView.builder(
+                            itemCount: widget.event_updates.length,
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            padding: EdgeInsets.only(bottom: 10),
+                            itemBuilder: (BuildContext context, int index) {
+                              String update = widget.event_updates[index];
+                              return Container(
+                                width: double.infinity,
+                                margin: EdgeInsets.all(15),
+                                padding: EdgeInsets.all(15),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.white,
                                 ),
-                              )
-                            : Container()
-                      ],
-                    )),
-                const SizedBox(height: 10),
-                const Center(
-                    child: Text("Updates",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18))),
-                Container(
-                  child: ListView.builder(
-                      itemCount: widget.event_updates.length,
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      padding: EdgeInsets.only(bottom: 10),
-                      itemBuilder: (BuildContext context, int index) {
-                        String update = widget.event_updates[index];
-                        return Container(
-                          width: double.infinity,
-                          margin: EdgeInsets.all(15),
-                          padding: EdgeInsets.all(15),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.white,
-                          ),
-                          child: Center(
-                            child: update.substring(0, 3) == '&&&'
-                                ? //Link
-                                Text(update.substring(3, update.length))
-                                : //Link
-                                Text(
-                                    utf8convert(update),
-                                  ),
-                          ),
-                        );
-                      }),
-                )
-              ],
-            ),
-          ),
-        ));
+                                child: Center(
+                                  child: update.substring(0, 3) == '&&&'
+                                      ? //Link
+                                      Text(update.substring(3, update.length))
+                                      : //Link
+                                      Text(
+                                          utf8convert(update),
+                                        ),
+                                ),
+                              );
+                            }),
+                      )
+                    ],
+                  ),
+                ),
+              )),
+        ),
+      ],
+    );
   }
 }
 
@@ -894,121 +931,125 @@ class _video_displayState extends State<video_display> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          leading: const BackButton(
-            color: Colors.white, // <-- SEE HERE
-          ),
-          actions: [
-            (ret == "" || ret == "failed")
-                ? IconButton(
-                    onPressed: () async {
-                      setState(() {
-                        ret = "start";
-                      });
-                      bool _permissionReady = await _checkPermission();
-                      if (_permissionReady) {
-                        await _prepareSaveDir();
-                        print("Downloading");
-                        try {
-                          List<String> urls = widget.event.eventImg!.split('?');
-                          List<String> subUrls = urls[0].split("/");
-                          await Dio().download(widget.event.eventImg!,
-                              _localPath + subUrls[subUrls.length - 1]);
-                          setState(() {
-                            ret = "sucess";
-                          });
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              duration: Duration(milliseconds: 400),
-                              content: Platform.isAndroid
-                                  ? const Text(
-                                      'success, check your download folder',
-                                      style: TextStyle(color: Colors.white),
-                                    )
-                                  : const Text(
-                                      'success, check your InstaBook folder in your "on my iphone"',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                            ),
-                          );
-                        } catch (e) {
-                          print(e.toString());
-                          setState(() {
-                            ret = "failed";
-                          });
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              duration: Duration(milliseconds: 400),
-                              content: Text(
-                                'failed',
-                                style: TextStyle(color: Colors.white),
+    return SizedBox(
+      width: 450.0,
+      child: Scaffold(
+          appBar: AppBar(
+            leading: const BackButton(
+              color: Colors.white, // <-- SEE HERE
+            ),
+            actions: [
+              (ret == "" || ret == "failed")
+                  ? IconButton(
+                      onPressed: () async {
+                        setState(() {
+                          ret = "start";
+                        });
+                        bool _permissionReady = await _checkPermission();
+                        if (_permissionReady) {
+                          await _prepareSaveDir();
+                          print("Downloading");
+                          try {
+                            List<String> urls =
+                                widget.event.eventImg!.split('?');
+                            List<String> subUrls = urls[0].split("/");
+                            await Dio().download(widget.event.eventImg!,
+                                _localPath + subUrls[subUrls.length - 1]);
+                            setState(() {
+                              ret = "sucess";
+                            });
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                duration: Duration(milliseconds: 400),
+                                content: Platform.isAndroid
+                                    ? const Text(
+                                        'success, check your download folder',
+                                        style: TextStyle(color: Colors.white),
+                                      )
+                                    : const Text(
+                                        'success, check your InstaBook folder in your "on my iphone"',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
                               ),
-                            ),
-                          );
+                            );
+                          } catch (e) {
+                            print(e.toString());
+                            setState(() {
+                              ret = "failed";
+                            });
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                duration: Duration(milliseconds: 400),
+                                content: Text(
+                                  'failed',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            );
+                          }
                         }
-                      }
-                    },
-                    icon:
-                        const Icon(Icons.download_rounded, color: Colors.white),
-                  )
-                : const CircularProgressIndicator(color: Colors.white)
-          ],
-          backgroundColor: Colors.black,
-        ),
-        body: Container(
-          color: Colors.black,
-          child: Center(
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  _showController = !_showController;
-                });
-              },
-              child: AspectRatio(
-                aspectRatio: widget._videoPlayerController.value.aspectRatio,
-                child: Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: <Widget>[
-                    VideoPlayer(widget._videoPlayerController),
-                    ClosedCaption(text: null),
-                    _showController == true
-                        ? Center(
-                            child: InkWell(
-                            child: Icon(
-                              widget._videoPlayerController.value.isPlaying
-                                  ? Icons.pause_circle_outline
-                                  : Icons.play_circle_outline,
-                              color: Colors.blue,
-                              size: 60,
-                            ),
-                            onTap: () {
-                              setState(() {
+                      },
+                      icon: const Icon(Icons.download_rounded,
+                          color: Colors.white),
+                    )
+                  : const CircularProgressIndicator(color: Colors.white)
+            ],
+            backgroundColor: Colors.black,
+          ),
+          body: Container(
+            color: Colors.black,
+            child: Center(
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _showController = !_showController;
+                  });
+                },
+                child: AspectRatio(
+                  aspectRatio: widget._videoPlayerController.value.aspectRatio,
+                  child: Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: <Widget>[
+                      VideoPlayer(widget._videoPlayerController),
+                      ClosedCaption(text: null),
+                      _showController == true
+                          ? Center(
+                              child: InkWell(
+                              child: Icon(
                                 widget._videoPlayerController.value.isPlaying
-                                    ? widget._videoPlayerController.pause()
-                                    : widget._videoPlayerController.play();
-                                _showController = !_showController;
-                              });
-                            },
-                          ))
-                        : Container(),
-                    // Here you can also add Overlay capacities
-                    VideoProgressIndicator(
-                      widget._videoPlayerController,
-                      allowScrubbing: true,
-                      padding: EdgeInsets.all(3),
-                      colors: const VideoProgressColors(
-                        backgroundColor: Colors.black,
-                        playedColor: Colors.white,
-                        bufferedColor: Colors.white70,
+                                    ? Icons.pause_circle_outline
+                                    : Icons.play_circle_outline,
+                                color: Colors.blue,
+                                size: 60,
+                              ),
+                              onTap: () {
+                                setState(() {
+                                  widget._videoPlayerController.value.isPlaying
+                                      ? widget._videoPlayerController.pause()
+                                      : widget._videoPlayerController.play();
+                                  _showController = !_showController;
+                                });
+                              },
+                            ))
+                          : Container(),
+                      // Here you can also add Overlay capacities
+                      VideoProgressIndicator(
+                        widget._videoPlayerController,
+                        allowScrubbing: true,
+                        padding: EdgeInsets.all(3),
+                        colors: const VideoProgressColors(
+                          backgroundColor: Colors.black,
+                          playedColor: Colors.white,
+                          bufferedColor: Colors.white70,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ));
+          )),
+    );
   }
 
   @override

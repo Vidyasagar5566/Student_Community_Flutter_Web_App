@@ -133,6 +133,7 @@ class _firstpageState extends State<firstpage> {
           false; //if showDialouge had returned null, then return false
     }
 
+    var var_width = MediaQuery.of(context).size.width;
     return WillPopScope(
       onWillPop: showExitPopup,
       child: RefreshIndicator(
@@ -151,442 +152,557 @@ class _firstpageState extends State<firstpage> {
         },
 
         child: Scaffold(
-          appBar: widget.curr_index == 4
-              ? null
-              : AppBar(
-                  iconTheme: IconThemeData(color: Colors.black),
-                  centerTitle: false,
-                  title: ((widget.app_user.email == "shiva@gmail.com" ||
-                          widget.app_user.email == "guest@gmail.com")
-                      ? const Text(
-                          "InstaBook",
-                          style: TextStyle(color: Colors.black),
-                        )
-                      : Text(
-                          domains[widget.app_user.domain!]!,
-                          style: const TextStyle(color: Colors.black),
-                        )),
-                  actions: [
-                    widget.curr_index == 3 ||
-                            widget.curr_index == 2 ||
-                            widget.curr_index == 1
-                        ? DropdownButton<String>(
-                            value: domain,
-                            underline: Container(),
-                            elevation: 0,
-                            iconEnabledColor: Colors.black,
-                            iconDisabledColor: Colors.black,
-                            items: domains_list
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(
-                                  value,
-                                  style: TextStyle(fontSize: 10),
-                                ),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                domain = value!;
-                              });
-                            })
-                        : Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    widget.app_user.notifCount = 0;
-                                  });
-                                  menu_bar_servers().notif_seen();
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (BuildContext context) {
-                                    return notifications(widget.app_user);
-                                  }));
-                                },
-                                child: Stack(children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        widget.app_user.notifCount = 0;
-                                      });
-                                      menu_bar_servers().notif_seen();
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (BuildContext context) {
-                                        return notifications(widget.app_user);
-                                      }));
-                                    },
-                                    icon: const Icon(
-                                      Icons.notifications_on_rounded,
-                                      size: 30,
-                                      color: Colors.indigo,
-                                    ),
-                                  ),
-                                  Positioned(
-                                    right: 7,
-                                    top: 7,
-                                    child: Container(
-                                      padding: EdgeInsets.all(2),
-                                      decoration: BoxDecoration(
-                                        color: Colors.red,
-                                        borderRadius: BorderRadius.circular(6),
-                                      ),
-                                      constraints: const BoxConstraints(
-                                        minWidth: 14,
-                                        minHeight: 14,
-                                      ),
-                                      child: Text(
-                                        notif_count.toString(),
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 8,
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                  )
-                                ]),
-                              ),
-                              IconButton(
-                                  onPressed: () {
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (BuildContext context) {
-                                      return messanger(widget.app_user);
-                                    }));
-                                  },
-                                  icon: const FaIcon(
-                                    FontAwesomeIcons.facebookMessenger,
-                                    size: 26,
-                                    color: Colors.indigo,
-                                  ))
-                            ],
-                          )
-                  ],
-                  backgroundColor: Colors.white,
-                ),
-          drawer: NavDrawer(widget.app_user),
-          body: widget.curr_index == 0
-              ? SingleChildScrollView(
-                  child: Container(
-                    color: Colors.white,
-                    child: Column(mainAxisSize: MainAxisSize.min, children: [
-                      Container(
-                        margin: const EdgeInsets.only(top: 20, bottom: 10),
-                        child: MAINBUTTONSwidget1(widget.app_user),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                              margin: const EdgeInsets.all(8),
-                              child: const Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    "Posts",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 15),
-                                  ))),
-                          DropdownButton<String>(
-                              value: domain,
-                              underline: Container(),
-                              elevation: 0,
-                              items: domains_list.map<DropdownMenuItem<String>>(
-                                  (String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(
-                                    value,
-                                    style: TextStyle(fontSize: 10),
-                                  ),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                  domain = value!;
-                                });
-                              })
-                        ],
-                      ),
-                      Flexible(child: postwidget(widget.app_user, domain))
-                    ]),
-                  ),
-                )
-              : widget.curr_index == 1
-                  ? Container(
-                      color: Colors.white,
-                      child: calender(widget.app_user, domains1[domain]!))
-                  : widget.curr_index == 2
-                      ? Container(
-                          color: Colors.white,
-                          child: activitieswidget(
-                              widget.app_user, domains1[domain]!))
-                      : widget.curr_index == 3
-                          ? Container(
-                              color: Colors.white,
-                              child: alertwidget(
-                                  widget.app_user, domains1[domain]!))
-                          : Container(
-                              color: Colors.white,
-                              child: userProfilePage(
-                                  widget.app_user, widget.app_user)),
-          floatingActionButton: widget.curr_index == 1
-              ? ElevatedButton.icon(
-                  onPressed: () async {
-                    showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (context) {
-                          return AlertDialog(
-                              contentPadding: EdgeInsets.all(15),
-                              content: Container(
-                                margin: EdgeInsets.all(10),
-                                child: const Column(
+          body: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              var_width > 700 ? NavDrawer(widget.app_user) : Container(),
+              Row(
+                children: [
+                  SizedBox(
+                    width: 450,
+                    child: Scaffold(
+                      drawer: MediaQuery.of(context).size.width < 700
+                          ? NavDrawer(widget.app_user)
+                          : null,
+                      appBar: widget.curr_index == 4
+                          ? null
+                          : AppBar(
+                              iconTheme: IconThemeData(color: Colors.black),
+                              centerTitle: false,
+                              title: ((widget.app_user.email ==
+                                          "shiva@gmail.com" ||
+                                      widget.app_user.email ==
+                                          "guest@gmail.com")
+                                  ? const Text(
+                                      "InstaBook",
+                                      style: TextStyle(color: Colors.black),
+                                    )
+                                  : Text(
+                                      domains[widget.app_user.domain!]!,
+                                      style:
+                                          const TextStyle(color: Colors.black),
+                                    )),
+                              actions: [
+                                widget.curr_index == 3 ||
+                                        widget.curr_index == 2 ||
+                                        widget.curr_index == 1
+                                    ? DropdownButton<String>(
+                                        value: domain,
+                                        underline: Container(),
+                                        elevation: 0,
+                                        iconEnabledColor: Colors.black,
+                                        iconDisabledColor: Colors.black,
+                                        items: domains_list
+                                            .map<DropdownMenuItem<String>>(
+                                                (String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(
+                                              value,
+                                              style: TextStyle(fontSize: 10),
+                                            ),
+                                          );
+                                        }).toList(),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            domain = value!;
+                                          });
+                                        })
+                                    : Row(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                widget.app_user.notifCount = 0;
+                                              });
+                                              menu_bar_servers().notif_seen();
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(builder:
+                                                      (BuildContext context) {
+                                                return notifications(
+                                                    widget.app_user);
+                                              }));
+                                            },
+                                            child: Stack(children: [
+                                              IconButton(
+                                                onPressed: () {
+                                                  setState(() {
+                                                    widget.app_user.notifCount =
+                                                        0;
+                                                  });
+                                                  menu_bar_servers()
+                                                      .notif_seen();
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(builder:
+                                                          (BuildContext
+                                                              context) {
+                                                    return notifications(
+                                                        widget.app_user);
+                                                  }));
+                                                },
+                                                icon: const Icon(
+                                                  Icons
+                                                      .notifications_on_rounded,
+                                                  size: 30,
+                                                  color: Colors.indigo,
+                                                ),
+                                              ),
+                                              Positioned(
+                                                right: 7,
+                                                top: 7,
+                                                child: Container(
+                                                  padding: EdgeInsets.all(2),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.red,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            6),
+                                                  ),
+                                                  constraints:
+                                                      const BoxConstraints(
+                                                    minWidth: 14,
+                                                    minHeight: 14,
+                                                  ),
+                                                  child: Text(
+                                                    notif_count.toString(),
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 8,
+                                                    ),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ),
+                                              )
+                                            ]),
+                                          ),
+                                          IconButton(
+                                              onPressed: () {
+                                                Navigator.of(context).push(
+                                                    MaterialPageRoute(builder:
+                                                        (BuildContext context) {
+                                                  return messanger(
+                                                      widget.app_user);
+                                                }));
+                                              },
+                                              icon: const FaIcon(
+                                                FontAwesomeIcons
+                                                    .facebookMessenger,
+                                                size: 26,
+                                                color: Colors.indigo,
+                                              ))
+                                        ],
+                                      )
+                              ],
+                              backgroundColor: Colors.white,
+                            ),
+
+                      body: widget.curr_index == 0
+                          ? SingleChildScrollView(
+                              child: Container(
+                                color: Colors.white,
+                                child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Text("Please wait"),
-                                      CircularProgressIndicator()
+                                      Container(
+                                        margin: const EdgeInsets.only(
+                                            top: 20, bottom: 10),
+                                        child:
+                                            MAINBUTTONSwidget1(widget.app_user),
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                              margin: const EdgeInsets.all(8),
+                                              child: const Align(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text(
+                                                    "Posts",
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        fontSize: 15),
+                                                  ))),
+                                          DropdownButton<String>(
+                                              value: domain,
+                                              underline: Container(),
+                                              elevation: 0,
+                                              items: domains_list.map<
+                                                      DropdownMenuItem<String>>(
+                                                  (String value) {
+                                                return DropdownMenuItem<String>(
+                                                  value: value,
+                                                  child: Text(
+                                                    value,
+                                                    style:
+                                                        TextStyle(fontSize: 10),
+                                                  ),
+                                                );
+                                              }).toList(),
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  domain = value!;
+                                                });
+                                              })
+                                        ],
+                                      ),
+                                      Flexible(
+                                          child: postwidget(
+                                              widget.app_user, domain))
                                     ]),
-                              ));
-                        });
-                    Map<List<CALENDER_EVENT>, List<EVENT_LIST>> total_data =
-                        await calendar_servers().get_calender_event_list(
-                            today.toString().split(" ")[0], domains1[domain]!);
-                    Navigator.pop(context);
-                    List<CALENDER_EVENT> cal_event_data =
-                        total_data.keys.toList()[0];
-                    List<EVENT_LIST> activity_data =
-                        total_data.values.toList()[0];
-
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            calender_events_display(
-                                widget.app_user,
-                                cal_event_data,
-                                activity_data,
-                                today.toString().split(" ")[0])));
-                  },
-                  icon: const Icon(Icons.edit, color: Colors.white),
-                  label: const Text("Today Events",
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold)),
-                  style: ElevatedButton.styleFrom(primary: Colors.grey),
-                )
-              : FloatingActionButton(
-                  onPressed: () {
-                    if (widget.curr_index == 3) {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (BuildContext context) {
-                        return threadCategory(widget.app_user);
-                      }));
-                    } else if (widget.curr_index == 2) {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (BuildContext context) {
-                        return eventCategory(widget.app_user);
-                      }));
-                    } else {
-                      showModalBottomSheet(
-                          shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(25))),
-                          context: context,
-                          builder: (BuildContext context) {
-                            return Container(
-                              height: 300,
-                              margin: EdgeInsets.all(10),
-                              padding: EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                  color: Colors.white70,
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  children: [
-                                    const Center(
-                                        child: Text("Add",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 20))),
-                                    const Divider(
-                                      color: Colors.grey,
-                                      height: 25,
-                                      thickness: 2,
-                                      indent: 5,
-                                      endIndent: 5,
-                                    ),
-                                    GestureDetector(
-                                        onTap: () {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(builder:
-                                                  (BuildContext context) {
-                                            return lst_found_upload(
-                                                widget.app_user);
-                                          }));
-                                        },
-                                        child: Container(
-                                            margin: EdgeInsets.all(7),
-                                            padding: EdgeInsets.all(2),
-                                            child: const Row(children: [
-                                              Icon(Icons.preview, size: 30),
-                                              SizedBox(width: 50),
-                                              Text("Lost or Found",
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      fontSize: 15))
-                                            ]))),
-                                    GestureDetector(
-                                        onTap: () {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(builder:
-                                                  (BuildContext context) {
-                                            return buy_sell_upload(
-                                                widget.app_user);
-                                          }));
-                                        },
-                                        child: Container(
-                                            margin: EdgeInsets.all(7),
-                                            padding: EdgeInsets.all(2),
-                                            child: const Row(children: [
-                                              Icon(Icons.offline_share,
-                                                  size: 30),
-                                              SizedBox(width: 50),
-                                              Text("Sharings",
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      fontSize: 15))
-                                            ]))),
-                                    GestureDetector(
-                                        onTap: () {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(builder:
-                                                  (BuildContext context) {
-                                            return postCategory(
-                                                widget.app_user);
-                                          }));
-                                        },
-                                        child: Container(
-                                            margin: EdgeInsets.all(7),
-                                            padding: EdgeInsets.all(2),
-                                            child: const Row(children: [
-                                              Icon(Icons.post_add, size: 30),
-                                              SizedBox(width: 50),
-                                              Text("Add post",
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      fontSize: 15))
-                                            ]))),
-                                    GestureDetector(
-                                        onTap: () {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(builder:
-                                                  (BuildContext context) {
-                                            return upload_notification(
-                                                widget.app_user);
-                                          }));
-                                        },
-                                        child: Container(
-                                            margin: EdgeInsets.all(7),
-                                            padding: EdgeInsets.all(2),
-                                            child: const Row(children: [
-                                              Icon(Icons.announcement_outlined,
-                                                  size: 30),
-                                              SizedBox(width: 50),
-                                              Text("Announcement ",
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      fontSize: 15))
-                                            ]))),
-                                    GestureDetector(
-                                        onTap: () {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(builder:
-                                                  (BuildContext context) {
-                                            return upload_cal_event(
-                                                widget.app_user);
-                                          }));
-                                        },
-                                        child: Container(
-                                            margin: EdgeInsets.all(7),
-                                            padding: EdgeInsets.all(2),
-                                            child: const Row(children: [
-                                              Icon(Icons.event_available,
-                                                  size: 30),
-                                              SizedBox(width: 50),
-                                              Text(" Calendar Events ",
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      fontSize: 15))
-                                            ])))
-                                  ],
-                                ),
                               ),
-                            );
+                            )
+                          : widget.curr_index == 1
+                              ? Container(
+                                  color: Colors.white,
+                                  child: calender(
+                                      widget.app_user, domains1[domain]!))
+                              : widget.curr_index == 2
+                                  ? Container(
+                                      color: Colors.white,
+                                      child: activitieswidget(
+                                          widget.app_user, domains1[domain]!))
+                                  : widget.curr_index == 3
+                                      ? Container(
+                                          color: Colors.white,
+                                          child: alertwidget(widget.app_user,
+                                              domains1[domain]!))
+                                      : Container(
+                                          color: Colors.white,
+                                          child: userProfilePage(
+                                              widget.app_user,
+                                              widget.app_user)),
+                      floatingActionButton: widget.curr_index == 1
+                          ? ElevatedButton.icon(
+                              onPressed: () async {
+                                showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                          contentPadding: EdgeInsets.all(15),
+                                          content: Container(
+                                            margin: EdgeInsets.all(10),
+                                            child: const Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Text("Please wait"),
+                                                  CircularProgressIndicator()
+                                                ]),
+                                          ));
+                                    });
+                                Map<List<CALENDER_EVENT>, List<EVENT_LIST>>
+                                    total_data = await calendar_servers()
+                                        .get_calender_event_list(
+                                            today.toString().split(" ")[0],
+                                            domains1[domain]!);
+                                Navigator.pop(context);
+                                List<CALENDER_EVENT> cal_event_data =
+                                    total_data.keys.toList()[0];
+                                List<EVENT_LIST> activity_data =
+                                    total_data.values.toList()[0];
+
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        calender_events_display(
+                                            widget.app_user,
+                                            cal_event_data,
+                                            activity_data,
+                                            today.toString().split(" ")[0])));
+                              },
+                              icon: const Icon(Icons.edit, color: Colors.white),
+                              label: const Text("Today Events",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold)),
+                              style: ElevatedButton.styleFrom(
+                                  primary: Colors.grey),
+                            )
+                          : FloatingActionButton(
+                              onPressed: () {
+                                if (widget.curr_index == 3) {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (BuildContext context) {
+                                    return threadCategory(widget.app_user);
+                                  }));
+                                } else if (widget.curr_index == 2) {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (BuildContext context) {
+                                    return eventCategory(widget.app_user);
+                                  }));
+                                } else {
+                                  showModalBottomSheet(
+                                      shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.vertical(
+                                              top: Radius.circular(25))),
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return Container(
+                                          height: 300,
+                                          margin: EdgeInsets.all(10),
+                                          padding: EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                              color: Colors.white70,
+                                              borderRadius:
+                                                  BorderRadius.circular(20)),
+                                          child: SingleChildScrollView(
+                                            child: Column(
+                                              children: [
+                                                const Center(
+                                                    child: Text("Add",
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontSize: 20))),
+                                                const Divider(
+                                                  color: Colors.grey,
+                                                  height: 25,
+                                                  thickness: 2,
+                                                  indent: 5,
+                                                  endIndent: 5,
+                                                ),
+                                                GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.of(context).push(
+                                                          MaterialPageRoute(
+                                                              builder:
+                                                                  (BuildContext
+                                                                      context) {
+                                                        return lst_found_upload(
+                                                            widget.app_user);
+                                                      }));
+                                                    },
+                                                    child: Container(
+                                                        margin:
+                                                            EdgeInsets.all(7),
+                                                        padding:
+                                                            EdgeInsets.all(2),
+                                                        child: const Row(
+                                                            children: [
+                                                              Icon(
+                                                                  Icons.preview,
+                                                                  size: 30),
+                                                              SizedBox(
+                                                                  width: 50),
+                                                              Text(
+                                                                  "Lost or Found",
+                                                                  style: TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                      fontSize:
+                                                                          15))
+                                                            ]))),
+                                                GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.of(context).push(
+                                                          MaterialPageRoute(
+                                                              builder:
+                                                                  (BuildContext
+                                                                      context) {
+                                                        return buy_sell_upload(
+                                                            widget.app_user);
+                                                      }));
+                                                    },
+                                                    child: Container(
+                                                        margin:
+                                                            EdgeInsets.all(7),
+                                                        padding:
+                                                            EdgeInsets.all(2),
+                                                        child: const Row(
+                                                            children: [
+                                                              Icon(
+                                                                  Icons
+                                                                      .offline_share,
+                                                                  size: 30),
+                                                              SizedBox(
+                                                                  width: 50),
+                                                              Text("Sharings",
+                                                                  style: TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                      fontSize:
+                                                                          15))
+                                                            ]))),
+                                                GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.of(context).push(
+                                                          MaterialPageRoute(
+                                                              builder:
+                                                                  (BuildContext
+                                                                      context) {
+                                                        return postCategory(
+                                                            widget.app_user);
+                                                      }));
+                                                    },
+                                                    child: Container(
+                                                        margin:
+                                                            EdgeInsets.all(7),
+                                                        padding:
+                                                            EdgeInsets.all(2),
+                                                        child: const Row(
+                                                            children: [
+                                                              Icon(
+                                                                  Icons
+                                                                      .post_add,
+                                                                  size: 30),
+                                                              SizedBox(
+                                                                  width: 50),
+                                                              Text("Add post",
+                                                                  style: TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                      fontSize:
+                                                                          15))
+                                                            ]))),
+                                                GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.of(context).push(
+                                                          MaterialPageRoute(
+                                                              builder:
+                                                                  (BuildContext
+                                                                      context) {
+                                                        return upload_notification(
+                                                            widget.app_user);
+                                                      }));
+                                                    },
+                                                    child: Container(
+                                                        margin:
+                                                            EdgeInsets.all(7),
+                                                        padding:
+                                                            EdgeInsets.all(2),
+                                                        child: const Row(
+                                                            children: [
+                                                              Icon(
+                                                                  Icons
+                                                                      .announcement_outlined,
+                                                                  size: 30),
+                                                              SizedBox(
+                                                                  width: 50),
+                                                              Text(
+                                                                  "Announcement ",
+                                                                  style: TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                      fontSize:
+                                                                          15))
+                                                            ]))),
+                                                GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.of(context).push(
+                                                          MaterialPageRoute(
+                                                              builder:
+                                                                  (BuildContext
+                                                                      context) {
+                                                        return upload_cal_event(
+                                                            widget.app_user);
+                                                      }));
+                                                    },
+                                                    child: Container(
+                                                        margin:
+                                                            EdgeInsets.all(7),
+                                                        padding:
+                                                            EdgeInsets.all(2),
+                                                        child: const Row(
+                                                            children: [
+                                                              Icon(
+                                                                  Icons
+                                                                      .event_available,
+                                                                  size: 30),
+                                                              SizedBox(
+                                                                  width: 50),
+                                                              Text(
+                                                                  " Calendar Events ",
+                                                                  style: TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                      fontSize:
+                                                                          15))
+                                                            ])))
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      });
+                                }
+                              },
+                              tooltip: 'wann share',
+                              child: Icon(
+                                Icons.add,
+                                color: Colors.blueAccent,
+                              ),
+                              elevation: 4.0,
+                            ),
+
+                      //floatingActionButtonLocation: FloatingActionButtonLocation.,
+
+                      bottomNavigationBar: BottomNavigationBar(
+                        fixedColor: Colors.blue,
+                        backgroundColor: Colors.white70,
+                        type: BottomNavigationBarType.fixed,
+                        items: const [
+                          BottomNavigationBarItem(
+                              label: "Home",
+                              icon: Icon(
+                                Icons.home,
+                              )),
+                          //*
+                          BottomNavigationBarItem(
+                              label: "Calender",
+                              icon: Icon(
+                                Icons.calendar_month,
+                              )), // */
+                          BottomNavigationBarItem(
+                              label: "Activities",
+                              icon: Icon(
+                                Icons.local_activity,
+                                size: 30,
+                              )),
+
+                          BottomNavigationBarItem(
+                              label: "Issues",
+                              icon: Icon(
+                                Icons.add_alert,
+                              )),
+
+                          BottomNavigationBarItem(
+                              label: "Profile",
+                              icon: Icon(
+                                Icons.person,
+                              )),
+                        ],
+                        currentIndex: widget.curr_index,
+                        onTap: (int index) {
+                          setState(() {
+                            domain = 'All';
+                            if (index == 1) {
+                              today = DateTime.now();
+                              domain = domains[widget.app_user.domain]!;
+                            }
+                            widget.curr_index = index;
+                            // }
                           });
-                    }
-                  },
-                  tooltip: 'wann share',
-                  child: Icon(
-                    Icons.add,
-                    color: Colors.blueAccent,
+                        },
+                      ),
+                    ),
                   ),
-                  elevation: 4.0,
-                ),
-
-          //floatingActionButtonLocation: FloatingActionButtonLocation.,
-
-          bottomNavigationBar: BottomNavigationBar(
-            fixedColor: Colors.blue,
-            backgroundColor: Colors.white70,
-            type: BottomNavigationBarType.fixed,
-            items: const [
-              BottomNavigationBarItem(
-                  label: "Home",
-                  icon: Icon(
-                    Icons.home,
-                  )),
-              //*
-              BottomNavigationBarItem(
-                  label: "Calender",
-                  icon: Icon(
-                    Icons.calendar_month,
-                  )), // */
-              BottomNavigationBarItem(
-                  label: "Activities",
-                  icon: Icon(
-                    Icons.local_activity,
-                    size: 30,
-                  )),
-
-              BottomNavigationBarItem(
-                  label: "Issues",
-                  icon: Icon(
-                    Icons.add_alert,
-                  )),
-
-              BottomNavigationBarItem(
-                  label: "Profile",
-                  icon: Icon(
-                    Icons.person,
-                  )),
+                  const SizedBox(width: 10),
+                  var_width > 1180
+                      ? Container(
+                          color: Colors.white,
+                          child:
+                              userProfilePage(widget.app_user, widget.app_user))
+                      : Container()
+                ],
+              ),
+              Container()
             ],
-            currentIndex: widget.curr_index,
-            onTap: (int index) {
-              setState(() {
-                domain = 'All';
-                if (index == 1) {
-                  today = DateTime.now();
-                  domain = domains[widget.app_user.domain]!;
-                }
-                widget.curr_index = index;
-                // }
-              });
-            },
           ),
         ),
       ),
@@ -608,7 +724,7 @@ class _MAINBUTTONSwidget1State extends State<MAINBUTTONSwidget1> {
   bool extand = false;
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
+    var width = 450;
     double div = width / 4.2;
     return Container(
         margin: EdgeInsets.all(2),

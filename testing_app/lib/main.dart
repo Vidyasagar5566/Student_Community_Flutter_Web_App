@@ -1,47 +1,26 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'First_page.dart';
 import 'package:localstorage/localstorage.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 //import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:timezone/data/latest.dart' as tz;
-import 'App_notifications/Remainder_nitifications.dart';
 import 'Login/login.dart';
-
-Future<void> _firebaseMessagingBackgroundHandler(message) async {
-  await Firebase.initializeApp();
-}
-
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+import 'package:firebase_core/firebase_core.dart';
 
 //Main Function which run by default
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-
-  if (Platform.isAndroid || Platform.isIOS) {
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-    FirebaseMessaging messaging = FirebaseMessaging.instance;
-    NotificationSettings settings = await messaging.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    );
-    NotificationService().initNotification();
-    FirebaseMessaging.onMessageOpenedApp.listen((remoteMessage) {
-      Map<String, dynamic> message = remoteMessage.data;
-    });
-  }
-
   tz.initializeTimeZones();
+
+  // Initialize Firebase
+  await Firebase.initializeApp(
+      options: const FirebaseOptions(
+          apiKey: "AIzaSyCUyxxufqAAv8keeLMretLSI7BLU94nu60",
+          authDomain: "instabook-sign-in.firebaseapp.com",
+          projectId: "instabook-sign-in",
+          storageBucket: "instabook-sign-in.appspot.com",
+          messagingSenderId: "755978359706",
+          appId: "1:755978359706:web:1fb4aa52166717c633a023",
+          measurementId: "G-TG4KZM573Z"));
   runApp(const MyApp());
 }
 
@@ -57,6 +36,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     LocalStorage storage = LocalStorage("usertoken");
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

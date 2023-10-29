@@ -28,82 +28,92 @@ class Allclubpagewidget extends StatefulWidget {
 class _AllclubpagewidgetState extends State<Allclubpagewidget> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: const BackButton(
-          color: Colors.blue, // <-- SEE HERE
-        ),
-        centerTitle: false,
-        title: const Text(
-          "CLUBS PAGE",
-          style: TextStyle(color: Colors.black),
-        ),
-        actions: [
-          DropdownButton<String>(
-              value: widget.domain,
-              underline: Container(),
-              elevation: 0,
-              items: domains_list.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(
-                    value,
-                    style: TextStyle(fontSize: 10),
-                  ),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  widget.domain = value!;
-                });
-              })
-        ],
-        backgroundColor: Colors.white70,
-      ),
-      body: FutureBuilder<List<ALL_CLUBS>>(
-        future: all_clubs_servers().get_clubs_list(domains1[widget.domain]!),
-        builder: (ctx, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasError) {
-              return Center(
-                child: Text(
-                  '${snapshot.error} occurred',
-                  style: TextStyle(fontSize: 18),
-                ),
-              );
-            } else if (snapshot.hasData) {
-              List<ALL_CLUBS> AllClubs = snapshot.data;
-              if (AllClubs.isEmpty) {
-                return Container(
-                  child: Center(child: Text("No Clubs Was Joined")),
-                );
-              } else {
-                return Allclubpagewidget1(AllClubs, widget.app_user);
-              }
-            }
-          }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-      ),
-      floatingActionButton: widget.app_user.clzClubsHead!
-          ? FloatingActionButton(
-              onPressed: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (BuildContext context) {
-                  return club_search_bar(
-                      widget.app_user, 0, widget.app_user.domain!, true, false);
-                }));
-              },
-              tooltip: 'create club',
-              elevation: 4.0,
-              child: const Icon(
-                Icons.add,
-                color: Colors.blueAccent,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 450.0,
+          child: Scaffold(
+            appBar: AppBar(
+              leading: const BackButton(
+                color: Colors.blue, // <-- SEE HERE
               ),
-            )
-          : Container(),
+              centerTitle: false,
+              title: const Text(
+                "CLUBS PAGE",
+                style: TextStyle(color: Colors.black),
+              ),
+              actions: [
+                DropdownButton<String>(
+                    value: widget.domain,
+                    underline: Container(),
+                    elevation: 0,
+                    items: domains_list
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(fontSize: 10),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        widget.domain = value!;
+                      });
+                    })
+              ],
+              backgroundColor: Colors.white70,
+            ),
+            body: FutureBuilder<List<ALL_CLUBS>>(
+              future:
+                  all_clubs_servers().get_clubs_list(domains1[widget.domain]!),
+              builder: (ctx, AsyncSnapshot snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        '${snapshot.error} occurred',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    );
+                  } else if (snapshot.hasData) {
+                    List<ALL_CLUBS> AllClubs = snapshot.data;
+                    if (AllClubs.isEmpty) {
+                      return Container(
+                        child: Center(child: Text("No Clubs Was Joined")),
+                      );
+                    } else {
+                      return Allclubpagewidget1(AllClubs, widget.app_user);
+                    }
+                  }
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
+            ),
+            floatingActionButton: widget.app_user.clzClubsHead!
+                ? FloatingActionButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (BuildContext context) {
+                        return club_search_bar(widget.app_user, 0,
+                            widget.app_user.domain!, true, false);
+                      }));
+                    },
+                    tooltip: 'create club',
+                    elevation: 4.0,
+                    child: const Icon(
+                      Icons.add,
+                      color: Colors.blueAccent,
+                    ),
+                  )
+                : Container(),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -123,7 +133,7 @@ class _Allclubpagewidget1State extends State<Allclubpagewidget1> {
     List<ALL_CLUBS> AllClubs = widget.AllClubs;
     return Container(
         height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
+        width: 450.0,
         child: SingleChildScrollView(
           child: ListView.builder(
               itemCount: AllClubs.length,
@@ -138,7 +148,7 @@ class _Allclubpagewidget1State extends State<Allclubpagewidget1> {
   }
 
   Widget _buildLoadingScreen(ALL_CLUBS club) {
-    var width = MediaQuery.of(context).size.width;
+    var width = 450.0;
     SmallUsername head = club.head!;
     return Container(
         child: GestureDetector(

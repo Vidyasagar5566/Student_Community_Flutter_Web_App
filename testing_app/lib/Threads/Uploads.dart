@@ -578,130 +578,138 @@ class _threadCategoryState extends State<threadCategory> {
       return upload_alertowidget(widget.app_user, 'student', '0');
     }
 
-    var wid = MediaQuery.of(context).size.width;
-    return Scaffold(
-        body: SingleChildScrollView(
-            child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                //color: Colors.pink[100],
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("images/background.jpg"),
-                      fit: BoxFit.cover),
-                ),
-                margin: const EdgeInsets.only(bottom: 20),
-                child: SingleChildScrollView(
-                    child: Column(
-                  children: [
-                    Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        ClipPath(
-                            clipper: profile_Clipper(),
-                            child: Container(
-                                height: 250,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                  colors: [
-                                    Colors.deepPurple,
-                                    Colors.purple.shade300
-                                  ],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                )))),
-                        Positioned(
-                            left: 25,
-                            top: 75,
-                            child: Row(
-                              children: [
-                                IconButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  icon: const Icon(
-                                    Icons.arrow_back_ios_new_outlined,
-                                    color: Colors.white,
-                                    size: 30,
-                                  ),
-                                ),
-                                const SizedBox(width: 20),
-                                SizedBox(
-                                  width: wid / 0.5,
-                                  child: const Text(
-                                    'Post Category',
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w700),
-                                  ),
-                                ),
-                              ],
-                            ))
-                      ],
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(
-                            MaterialPageRoute(builder: (BuildContext context) {
-                          return upload_alertowidget(
-                              widget.app_user, 'student', '0');
-                        }));
-                      },
-                      child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(10)),
-                            gradient: LinearGradient(
-                              colors: [
-                                Colors.deepPurple,
-                                Colors.purple.shade300
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                          ),
-                          margin: const EdgeInsets.only(
-                              left: 20, right: 20, top: 10, bottom: 10),
-                          padding: const EdgeInsets.only(
-                              top: 7, left: 20, bottom: 7),
+    var wid = 450.00;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 450.0,
+          child: Scaffold(
+              body: SingleChildScrollView(
+                  child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height,
+                      //color: Colors.pink[100],
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage("images/background.jpg"),
+                            fit: BoxFit.cover),
+                      ),
+                      margin: const EdgeInsets.only(bottom: 20),
+                      child: SingleChildScrollView(
                           child: Column(
+                        children: [
+                          Stack(
+                            alignment: Alignment.center,
                             children: [
-                              Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Container(
-                                      margin:
-                                          EdgeInsets.only(top: 10, bottom: 10),
-                                      constraints:
-                                          BoxConstraints(maxWidth: wid / 2),
-                                      child: const Text(
-                                        'Student Post',
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white),
+                              ClipPath(
+                                  clipper: profile_Clipper(),
+                                  child: Container(
+                                      height: 250,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                        colors: [
+                                          Colors.deepPurple,
+                                          Colors.purple.shade300
+                                        ],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                      )))),
+                              Positioned(
+                                  left: 25,
+                                  top: 75,
+                                  child: Row(
+                                    children: [
+                                      IconButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        icon: const Icon(
+                                          Icons.arrow_back_ios_new_outlined,
+                                          color: Colors.white,
+                                          size: 30,
+                                        ),
                                       ),
-                                    ),
-                                  ])
+                                      const SizedBox(width: 20),
+                                      SizedBox(
+                                        width: wid / 0.5,
+                                        child: const Text(
+                                          'Post Category',
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                      ),
+                                    ],
+                                  ))
                             ],
-                          )),
-                    ),
-                    const SizedBox(height: 30),
-                    ListView.builder(
-                        itemCount: 4,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        padding: const EdgeInsets.only(bottom: 10),
-                        itemBuilder: (BuildContext context, int index) {
-                          return build_screen(index);
-                        })
-                  ],
-                )))));
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (BuildContext context) {
+                                return upload_alertowidget(
+                                    widget.app_user, 'student', '0');
+                              }));
+                            },
+                            child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10)),
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Colors.deepPurple,
+                                      Colors.purple.shade300
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
+                                ),
+                                margin: const EdgeInsets.only(
+                                    left: 20, right: 20, top: 10, bottom: 10),
+                                padding: const EdgeInsets.only(
+                                    top: 7, left: 20, bottom: 7),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.only(
+                                                top: 10, bottom: 10),
+                                            constraints: BoxConstraints(
+                                                maxWidth: wid / 2),
+                                            child: const Text(
+                                              'Student Post',
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ])
+                                  ],
+                                )),
+                          ),
+                          const SizedBox(height: 30),
+                          ListView.builder(
+                              itemCount: 4,
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              padding: const EdgeInsets.only(bottom: 10),
+                              itemBuilder: (BuildContext context, int index) {
+                                return build_screen(index);
+                              })
+                        ],
+                      ))))),
+        ),
+      ],
+    );
   }
 
   Widget build_screen(int index) {

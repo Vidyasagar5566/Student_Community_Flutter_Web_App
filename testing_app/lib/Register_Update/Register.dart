@@ -71,7 +71,7 @@ class _LoginRegisterState extends State<LoginRegister> {
                     return AlertDialog(
                       content: SingleChildScrollView(
                         child: Container(
-                          width: MediaQuery.of(context).size.width,
+                          width: 450.0,
                           child: SingleChildScrollView(
                             child: Column(
                               children: [

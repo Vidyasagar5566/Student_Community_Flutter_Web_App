@@ -14,37 +14,46 @@ class notif_settings extends StatefulWidget {
 class _notif_settingsState extends State<notif_settings> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          iconTheme: IconThemeData(color: Colors.black),
-          title: const Text(
-            "Notification Settings",
-            style: TextStyle(color: Colors.black),
-          ),
-          backgroundColor: Colors.white70,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 450.0,
+          child: Scaffold(
+              appBar: AppBar(
+                centerTitle: true,
+                iconTheme: IconThemeData(color: Colors.black),
+                title: const Text(
+                  "Notification Settings",
+                  style: TextStyle(color: Colors.black),
+                ),
+                backgroundColor: Colors.white70,
+              ),
+              body: FutureBuilder<List<NotificationsFilter>>(
+                future: menu_bar_servers().notif_settings_get(),
+                builder: (ctx, AsyncSnapshot snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Text(
+                          '${snapshot.error} occurred',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      );
+                    } else if (snapshot.hasData) {
+                      List<NotificationsFilter> notif_settings = snapshot.data;
+                      return notif_settings1(
+                          notif_settings[0], widget.app_user);
+                    }
+                  }
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+              )),
         ),
-        body: FutureBuilder<List<NotificationsFilter>>(
-          future: menu_bar_servers().notif_settings_get(),
-          builder: (ctx, AsyncSnapshot snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasError) {
-                return Center(
-                  child: Text(
-                    '${snapshot.error} occurred',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                );
-              } else if (snapshot.hasData) {
-                List<NotificationsFilter> notif_settings = snapshot.data;
-                return notif_settings1(notif_settings[0], widget.app_user);
-              }
-            }
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          },
-        ));
+      ],
+    );
   }
 }
 

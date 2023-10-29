@@ -24,76 +24,85 @@ class sacpagewidget extends StatefulWidget {
 class _sacpagewidgetState extends State<sacpagewidget> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: const BackButton(
-          color: Colors.blue, // <-- SEE HERE
-        ),
-        centerTitle: false,
-        title: const Text(
-          "SAC PAGE",
-          style: TextStyle(color: Colors.black),
-        ),
-        actions: [
-          DropdownButton<String>(
-              value: widget.domain,
-              underline: Container(),
-              elevation: 0,
-              items: domains_list.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(
-                    value,
-                    style: TextStyle(fontSize: 10),
-                  ),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  widget.domain = value!;
-                });
-              })
-        ],
-        backgroundColor: Colors.white70,
-      ),
-      body: FutureBuilder<List<SAC_MEMS>>(
-        future: sac_servers().get_sac_list(domains1[widget.domain]!),
-        builder: (ctx, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasError) {
-              return Center(
-                child: Text(
-                  '${snapshot.error} occurred',
-                  style: TextStyle(fontSize: 18),
-                ),
-              );
-            } else if (snapshot.hasData) {
-              List<SAC_MEMS> sac_list = snapshot.data;
-              return _buildListView(sac_list);
-            }
-          }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-      ),
-      floatingActionButton: widget.app_user.clzSacsHead!
-          ? FloatingActionButton(
-              onPressed: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (BuildContext context) {
-                  return sac_search_bar(
-                      widget.app_user, 0, widget.app_user.domain!, true);
-                }));
-              },
-              tooltip: 'create club',
-              elevation: 4.0,
-              child: const Icon(
-                Icons.add,
-                color: Colors.blueAccent,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 450.0,
+          child: Scaffold(
+            appBar: AppBar(
+              leading: const BackButton(
+                color: Colors.blue, // <-- SEE HERE
               ),
-            )
-          : Container(),
+              centerTitle: false,
+              title: const Text(
+                "SAC PAGE",
+                style: TextStyle(color: Colors.black),
+              ),
+              actions: [
+                DropdownButton<String>(
+                    value: widget.domain,
+                    underline: Container(),
+                    elevation: 0,
+                    items: domains_list
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(fontSize: 10),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        widget.domain = value!;
+                      });
+                    })
+              ],
+              backgroundColor: Colors.white70,
+            ),
+            body: FutureBuilder<List<SAC_MEMS>>(
+              future: sac_servers().get_sac_list(domains1[widget.domain]!),
+              builder: (ctx, AsyncSnapshot snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        '${snapshot.error} occurred',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    );
+                  } else if (snapshot.hasData) {
+                    List<SAC_MEMS> sac_list = snapshot.data;
+                    return _buildListView(sac_list);
+                  }
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
+            ),
+            floatingActionButton: widget.app_user.clzSacsHead!
+                ? FloatingActionButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (BuildContext context) {
+                        return sac_search_bar(
+                            widget.app_user, 0, widget.app_user.domain!, true);
+                      }));
+                    },
+                    tooltip: 'create club',
+                    elevation: 4.0,
+                    child: const Icon(
+                      Icons.add,
+                      color: Colors.blueAccent,
+                    ),
+                  )
+                : Container(),
+          ),
+        ),
+      ],
     );
   }
 
@@ -106,7 +115,7 @@ class _sacpagewidgetState extends State<sacpagewidget> {
           )
         : Container(
             height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
+            width: 450.0,
             child: SingleChildScrollView(
               child: ListView.builder(
                   itemCount: sac_list.length,
@@ -121,7 +130,7 @@ class _sacpagewidgetState extends State<sacpagewidget> {
   }
 
   Widget _buildLoadingScreen(SAC_MEMS sac_mem) {
-    var width = MediaQuery.of(context).size.width;
+    var width = 450.0;
     return GestureDetector(
       onTap: () {
         Navigator.of(context)
@@ -343,77 +352,86 @@ class _sacProfilePageState extends State<sacProfilePage> {
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        iconTheme: IconThemeData(color: Colors.white),
-        title: Text(widget.sac.name!, style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.indigoAccent[700],
-      ),
-      body: Container(
-          child: widget.curr_index == 0
-              ? SingleChildScrollView(
-                  child: user_postswidget(
-                      '', widget.app_user, 'club', widget.sac.id!),
-                )
-              : widget.curr_index == 1
-                  ? SingleChildScrollView(
-                      child: loaded
-                          ? activitieswidget1(event_list, widget.app_user,
-                              widget.app_user.domain!, true)
-                          : Container(
-                              margin: EdgeInsets.only(top: height / 3),
-                              child:
-                                  Center(child: CircularProgressIndicator())))
-                  : SingleChildScrollView(
-                      child: loaded
-                          ? alertwidget1(thread_list, widget.app_user,
-                              widget.app_user.domain!, true)
-                          : Container(
-                              margin: EdgeInsets.only(top: height / 3),
-                              child:
-                                  Center(child: CircularProgressIndicator())),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 450.0,
+          child: Scaffold(
+            appBar: AppBar(
+              centerTitle: true,
+              iconTheme: IconThemeData(color: Colors.white),
+              title:
+                  Text(widget.sac.name!, style: TextStyle(color: Colors.white)),
+              backgroundColor: Colors.indigoAccent[700],
+            ),
+            body: Container(
+                child: widget.curr_index == 0
+                    ? SingleChildScrollView(
+                        child: user_postswidget(
+                            '', widget.app_user, 'club', widget.sac.id!),
+                      )
+                    : widget.curr_index == 1
+                        ? SingleChildScrollView(
+                            child: loaded
+                                ? activitieswidget1(event_list, widget.app_user,
+                                    widget.app_user.domain!, true)
+                                : Container(
+                                    margin: EdgeInsets.only(top: height / 3),
+                                    child: Center(
+                                        child: CircularProgressIndicator())))
+                        : SingleChildScrollView(
+                            child: loaded
+                                ? alertwidget1(thread_list, widget.app_user,
+                                    widget.app_user.domain!, true)
+                                : Container(
+                                    margin: EdgeInsets.only(top: height / 3),
+                                    child: Center(
+                                        child: CircularProgressIndicator())),
+                          )),
+            bottomNavigationBar: BottomNavigationBar(
+              fixedColor: Colors.blue,
+              backgroundColor: Colors.white70,
+              type: BottomNavigationBarType.fixed,
+              items: const [
+                BottomNavigationBarItem(
+                    label: "Posts",
+                    icon: Icon(
+                      Icons.person,
                     )),
-      bottomNavigationBar: BottomNavigationBar(
-        fixedColor: Colors.blue,
-        backgroundColor: Colors.white70,
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(
-              label: "Posts",
-              icon: Icon(
-                Icons.person,
-              )),
-          BottomNavigationBarItem(
-              label: "Activities",
-              icon: Icon(
-                Icons.local_activity,
-                size: 30,
-              )),
-          BottomNavigationBarItem(
-              label: "Issues",
-              icon: Icon(
-                Icons.add_alert,
-              )),
-        ],
-        currentIndex: widget.curr_index,
-        onTap: (int index) async {
-          setState(() {
-            widget.curr_index = index;
-            loaded = false;
-          });
-          if (index == 1) {
-            event_list = await user_profile_servers()
-                .get_user_activity_list('', 'sac', widget.sac.id!);
-          } else if (index == 2) {
-            thread_list = await user_profile_servers()
-                .get_user_thread_list('', 'sac', widget.sac.id!);
-          }
-          setState(() {
-            loaded = true;
-          });
-        },
-      ),
+                BottomNavigationBarItem(
+                    label: "Activities",
+                    icon: Icon(
+                      Icons.local_activity,
+                      size: 30,
+                    )),
+                BottomNavigationBarItem(
+                    label: "Issues",
+                    icon: Icon(
+                      Icons.add_alert,
+                    )),
+              ],
+              currentIndex: widget.curr_index,
+              onTap: (int index) async {
+                setState(() {
+                  widget.curr_index = index;
+                  loaded = false;
+                });
+                if (index == 1) {
+                  event_list = await user_profile_servers()
+                      .get_user_activity_list('', 'sac', widget.sac.id!);
+                } else if (index == 2) {
+                  thread_list = await user_profile_servers()
+                      .get_user_thread_list('', 'sac', widget.sac.id!);
+                }
+                setState(() {
+                  loaded = true;
+                });
+              },
+            ),
+          ),
+        ),
+      ],
     );
     ;
   }

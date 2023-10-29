@@ -29,81 +29,91 @@ class Allsportpagewidget extends StatefulWidget {
 class _AllsportpagewidgetState extends State<Allsportpagewidget> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: const BackButton(
-          color: Colors.blue, // <-- SEE HERE
-        ),
-        centerTitle: false,
-        title: const Text(
-          "SPORTS PAGE",
-          style: TextStyle(color: Colors.black),
-        ),
-        actions: [
-          DropdownButton<String>(
-              value: widget.domain,
-              underline: Container(),
-              elevation: 0,
-              items: domains_list.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(
-                    value,
-                    style: TextStyle(fontSize: 10),
-                  ),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  widget.domain = value!;
-                });
-              })
-        ],
-        backgroundColor: Colors.white70,
-      ),
-      body: FutureBuilder<List<ALL_SPORTS>>(
-        future: all_sports_servers().get_sport_list(domains1[widget.domain]!),
-        builder: (ctx, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasError) {
-              return Center(
-                child: Text(
-                  '${snapshot.error} occurred',
-                  style: TextStyle(fontSize: 18),
-                ),
-              );
-            } else if (snapshot.hasData) {
-              List<ALL_SPORTS> sport_list = snapshot.data;
-              if (sport_list.length == 0) {
-                return Container(
-                    child: Center(child: Text("No Sports Was Joined")));
-              } else {
-                return Allsportpagewidget1(sport_list, widget.app_user);
-              }
-            }
-          }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-      ),
-      floatingActionButton: widget.app_user.clzSportsHead!
-          ? FloatingActionButton(
-              onPressed: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (BuildContext context) {
-                  return sport_search_bar(
-                      widget.app_user, 0, widget.app_user.domain!, true, false);
-                }));
-              },
-              tooltip: 'create sport',
-              elevation: 4.0,
-              child: const Icon(
-                Icons.add,
-                color: Colors.blueAccent,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 450.0,
+          child: Scaffold(
+            appBar: AppBar(
+              leading: const BackButton(
+                color: Colors.blue, // <-- SEE HERE
               ),
-            )
-          : Container(),
+              centerTitle: false,
+              title: const Text(
+                "SPORTS PAGE",
+                style: TextStyle(color: Colors.black),
+              ),
+              actions: [
+                DropdownButton<String>(
+                    value: widget.domain,
+                    underline: Container(),
+                    elevation: 0,
+                    items: domains_list
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(fontSize: 10),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        widget.domain = value!;
+                      });
+                    })
+              ],
+              backgroundColor: Colors.white70,
+            ),
+            body: FutureBuilder<List<ALL_SPORTS>>(
+              future:
+                  all_sports_servers().get_sport_list(domains1[widget.domain]!),
+              builder: (ctx, AsyncSnapshot snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        '${snapshot.error} occurred',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    );
+                  } else if (snapshot.hasData) {
+                    List<ALL_SPORTS> sport_list = snapshot.data;
+                    if (sport_list.length == 0) {
+                      return Container(
+                          child: Center(child: Text("No Sports Was Joined")));
+                    } else {
+                      return Allsportpagewidget1(sport_list, widget.app_user);
+                    }
+                  }
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
+            ),
+            floatingActionButton: widget.app_user.clzSportsHead!
+                ? FloatingActionButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (BuildContext context) {
+                        return sport_search_bar(widget.app_user, 0,
+                            widget.app_user.domain!, true, false);
+                      }));
+                    },
+                    tooltip: 'create sport',
+                    elevation: 4.0,
+                    child: const Icon(
+                      Icons.add,
+                      color: Colors.blueAccent,
+                    ),
+                  )
+                : Container(),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -123,7 +133,7 @@ class _Allsportpagewidget1State extends State<Allsportpagewidget1> {
     List<ALL_SPORTS> sport_list = widget.sport_list;
     return Container(
         height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
+        width: 450.0,
         child: SingleChildScrollView(
           child: ListView.builder(
               itemCount: sport_list.length,
@@ -138,7 +148,7 @@ class _Allsportpagewidget1State extends State<Allsportpagewidget1> {
   }
 
   Widget _buildLoadingScreen(ALL_SPORTS sport) {
-    var width = MediaQuery.of(context).size.width;
+    var width = 450.0;
     SmallUsername head = sport.head!;
     return Container(
         child: GestureDetector(

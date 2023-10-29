@@ -180,90 +180,99 @@ class AcademicTimings extends StatefulWidget {
 class _AcademicTimingsState extends State<AcademicTimings> {
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      initialIndex: today_day.weekday - 1,
-      length: 7,
-      child: Scaffold(
-          appBar: AppBar(
-              leading: const BackButton(
-                color: Colors.blue, // <-- SEE HERE
-              ),
-              centerTitle: false,
-              title: const Text(
-                "Timings",
-                style: TextStyle(color: Colors.black),
-              ),
-              actions: [
-                DropdownButton<String>(
-                    value: widget.domain,
-                    underline: Container(),
-                    elevation: 0,
-                    items: domains_list
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(
-                          value,
-                          style: TextStyle(fontSize: 10),
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        widget.domain = value!;
-                      });
-                    })
-              ],
-              backgroundColor: Colors.white70,
-              bottom: TabBar(
-                indicator: BoxDecoration(
-                    borderRadius: BorderRadius.circular(21), // Creates border
-                    color: Colors.grey),
-                indicatorColor: Colors.grey,
-                isScrollable: true,
-                labelColor: Colors.black,
-                tabs: tabs(),
-              )),
-          body: FutureBuilder<List<ACADEMIC_LIST>>(
-            future:
-                timings_servers().get_academic_list(domains1[widget.domain]!),
-            builder: (ctx, AsyncSnapshot snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.hasError) {
-                  return Center(
-                    child: Text(
-                      '${snapshot.error} occurred',
-                      style: TextStyle(fontSize: 18),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 450.0,
+          child: DefaultTabController(
+            initialIndex: today_day.weekday - 1,
+            length: 7,
+            child: Scaffold(
+                appBar: AppBar(
+                    leading: const BackButton(
+                      color: Colors.blue, // <-- SEE HERE
                     ),
-                  );
-                } else if (snapshot.hasData) {
-                  List<ACADEMIC_LIST> academic_list = snapshot.data;
-                  return _buildListView(academic_list);
-                }
-              }
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            },
-          ),
-          floatingActionButton: widget.app_user.clzSacsHead! &&
-                  domains1[widget.domain] == widget.app_user.domain
-              ? FloatingActionButton(
-                  onPressed: () async {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (BuildContext context) {
-                      return academic_create(
-                          0, widget.app_user, '', '', '', '', '', '', '', '');
-                    }));
+                    centerTitle: false,
+                    title: const Text(
+                      "Timings",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    actions: [
+                      DropdownButton<String>(
+                          value: widget.domain,
+                          underline: Container(),
+                          elevation: 0,
+                          items: domains_list
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value,
+                                style: TextStyle(fontSize: 10),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              widget.domain = value!;
+                            });
+                          })
+                    ],
+                    backgroundColor: Colors.white70,
+                    bottom: TabBar(
+                      indicator: BoxDecoration(
+                          borderRadius:
+                              BorderRadius.circular(21), // Creates border
+                          color: Colors.grey),
+                      indicatorColor: Colors.grey,
+                      isScrollable: true,
+                      labelColor: Colors.black,
+                      tabs: tabs(),
+                    )),
+                body: FutureBuilder<List<ACADEMIC_LIST>>(
+                  future: timings_servers()
+                      .get_academic_list(domains1[widget.domain]!),
+                  builder: (ctx, AsyncSnapshot snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasError) {
+                        return Center(
+                          child: Text(
+                            '${snapshot.error} occurred',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        );
+                      } else if (snapshot.hasData) {
+                        List<ACADEMIC_LIST> academic_list = snapshot.data;
+                        return _buildListView(academic_list);
+                      }
+                    }
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
                   },
-                  tooltip: 'wann share',
-                  elevation: 4.0,
-                  child: const Icon(
-                    Icons.add,
-                    color: Colors.blueAccent,
-                  ),
-                )
-              : Container()),
+                ),
+                floatingActionButton: widget.app_user.clzSacsHead! &&
+                        domains1[widget.domain] == widget.app_user.domain
+                    ? FloatingActionButton(
+                        onPressed: () async {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context) {
+                            return academic_create(0, widget.app_user, '', '',
+                                '', '', '', '', '', '');
+                          }));
+                        },
+                        tooltip: 'wann share',
+                        elevation: 4.0,
+                        child: const Icon(
+                          Icons.add,
+                          color: Colors.blueAccent,
+                        ),
+                      )
+                    : Container()),
+          ),
+        ),
+      ],
     );
   }
 

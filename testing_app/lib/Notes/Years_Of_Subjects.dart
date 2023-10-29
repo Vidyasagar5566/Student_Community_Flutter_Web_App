@@ -89,207 +89,228 @@ class _cal_sub_yearsState extends State<cal_sub_years> {
 
   @override
   Widget build(BuildContext context) {
-    var wid = MediaQuery.of(context).size.width;
+    var wid = 450.0;
     //sub_years = widget.cal_sub_years_list;
-    return Scaffold(
-      body: SingleChildScrollView(
-          child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              //color: Colors.pink[100],
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage("images/background.jpg"),
-                    fit: BoxFit.cover),
-              ),
-              child: SingleChildScrollView(
-                  child: Column(
-                      //mainAxisAlignment: MainAxisAlignment.center,
-                      //crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                    Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        ClipPath(
-                            clipper: profile_Clipper(),
-                            child: Container(
-                              height: 250,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                colors: [
-                                  Colors.deepPurple,
-                                  Colors.purple.shade300
-                                ],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              )),
-                            )),
-                        Positioned(
-                            left: 25,
-                            top: 75,
-                            child: Row(
-                              children: [
-                                IconButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  icon: const Icon(
-                                    Icons.arrow_back_ios_new_outlined,
-                                    color: Colors.white,
-                                    size: 30,
-                                  ),
-                                ),
-                                const SizedBox(width: 20),
-                                SizedBox(
-                                  width: wid / 1.7,
-                                  child: Text(
-                                    utf8convert(widget.cal_sub_name.subName!),
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 2,
-                                    style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w700),
-                                  ),
-                                ),
-                              ],
-                            ))
-                      ],
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 450.0,
+          child: Scaffold(
+            body: SingleChildScrollView(
+                child: Container(
+                    width: 450.0,
+                    height: MediaQuery.of(context).size.height,
+                    //color: Colors.pink[100],
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage("images/background.jpg"),
+                          fit: BoxFit.cover),
                     ),
-                    build_screen()
-                  ])))),
-      floatingActionButton: ElevatedButton.icon(
-        onPressed: () {
-          showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (context) {
-                return AlertDialog(
-                    contentPadding: EdgeInsets.all(15),
-                    content: Column(mainAxisSize: MainAxisSize.min, children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(),
-                          IconButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              icon: const Icon(Icons.close))
-                        ],
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(left: 40, right: 40),
-                        child: TextField(
-                          keyboardType: TextInputType.emailAddress,
-                          decoration: const InputDecoration(
-                              labelText: 'year',
-                              hintText: '2019',
-                              prefixIcon: Icon(Icons.text_fields),
-                              border: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)))),
-                          onChanged: (String value) {
-                            setState(() {
-                              year_name = value;
-                              if (value == "") {
-                                year_name = null;
-                              }
-                            });
-                          },
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      private_switch(widget.app_user),
-                      const SizedBox(height: 10),
-                      TextButton(
-                          onPressed: () async {
-                            widget.cal_sub_name.allYears = "";
-                            if (!widget.app_user.isStudentAdmin!) {
-                              Navigator.pop(context);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  duration: Duration(milliseconds: 400),
-                                  content: Text(
-                                    "Students are not allowed",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                              );
-                            } else {
-                              if (year_name == null) {
-                                Navigator.pop(context);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    duration: Duration(milliseconds: 400),
-                                    content: Text(
-                                      " year cant be null",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                );
-                              } else if (widget.cal_sub_name.allYears!
-                                  .contains(year_name)) {
-                                Navigator.pop(context);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    duration: Duration(milliseconds: 400),
-                                    content: Text(
-                                      " sub_task was already present. plese check it out.",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                );
-                              } else {
-                                Navigator.pop(context);
-
-                                List<dynamic> error = await notes_servers()
-                                    .add_cal_sub_year(
-                                        widget.cal_sub_name.id.toString(),
-                                        year_name,
-                                        _lights);
-
-                                if (!error[0]) {
-                                  CAL_SUB_YEARS new_sub_year = CAL_SUB_YEARS();
-                                  new_sub_year.id = error[1];
-                                  new_sub_year.yearName = year_name;
-                                  new_sub_year.private = _lights;
-                                  new_sub_year.username =
-                                      user_min(widget.app_user);
-                                  setState(() {
-                                    sub_years.add(new_sub_year);
-                                  });
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      duration: Duration(milliseconds: 400),
-                                      content: Text(
-                                        "error occured please try again",
-                                        style: TextStyle(color: Colors.white),
+                    child: SingleChildScrollView(
+                        child: Column(
+                            //mainAxisAlignment: MainAxisAlignment.center,
+                            //crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                          Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              ClipPath(
+                                  clipper: profile_Clipper(),
+                                  child: Container(
+                                    height: 250,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                      colors: [
+                                        Colors.deepPurple,
+                                        Colors.purple.shade300
+                                      ],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                    )),
+                                  )),
+                              Positioned(
+                                  left: 25,
+                                  top: 75,
+                                  child: Row(
+                                    children: [
+                                      IconButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        icon: const Icon(
+                                          Icons.arrow_back_ios_new_outlined,
+                                          color: Colors.white,
+                                          size: 30,
+                                        ),
                                       ),
-                                    ),
-                                  );
-                                }
-                              }
-                            }
-                          },
-                          child: const Center(
-                            child: Text("Add"),
-                          ))
-                    ]));
-              });
-        },
-        label: const Text("Add new year",
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-        icon: const Icon(Icons.edit, color: Colors.white),
-        style: ElevatedButton.styleFrom(primary: Colors.deepPurple),
-      ),
+                                      const SizedBox(width: 20),
+                                      SizedBox(
+                                        width: wid / 1.7,
+                                        child: Text(
+                                          utf8convert(
+                                              widget.cal_sub_name.subName!),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 2,
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                      ),
+                                    ],
+                                  ))
+                            ],
+                          ),
+                          build_screen()
+                        ])))),
+            floatingActionButton: ElevatedButton.icon(
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) {
+                      return AlertDialog(
+                          contentPadding: EdgeInsets.all(15),
+                          content:
+                              Column(mainAxisSize: MainAxisSize.min, children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(),
+                                IconButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    icon: const Icon(Icons.close))
+                              ],
+                            ),
+                            Container(
+                              padding: EdgeInsets.only(left: 40, right: 40),
+                              child: TextField(
+                                keyboardType: TextInputType.emailAddress,
+                                decoration: const InputDecoration(
+                                    labelText: 'year',
+                                    hintText: '2019',
+                                    prefixIcon: Icon(Icons.text_fields),
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10)))),
+                                onChanged: (String value) {
+                                  setState(() {
+                                    year_name = value;
+                                    if (value == "") {
+                                      year_name = null;
+                                    }
+                                  });
+                                },
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            private_switch(widget.app_user),
+                            const SizedBox(height: 10),
+                            TextButton(
+                                onPressed: () async {
+                                  widget.cal_sub_name.allYears = "";
+                                  if (!widget.app_user.isStudentAdmin!) {
+                                    Navigator.pop(context);
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        duration: Duration(milliseconds: 400),
+                                        content: Text(
+                                          "Students are not allowed",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    );
+                                  } else {
+                                    if (year_name == null) {
+                                      Navigator.pop(context);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          duration: Duration(milliseconds: 400),
+                                          content: Text(
+                                            " year cant be null",
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                      );
+                                    } else if (widget.cal_sub_name.allYears!
+                                        .contains(year_name)) {
+                                      Navigator.pop(context);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          duration: Duration(milliseconds: 400),
+                                          content: Text(
+                                            " sub_task was already present. plese check it out.",
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      Navigator.pop(context);
+
+                                      List<dynamic> error =
+                                          await notes_servers()
+                                              .add_cal_sub_year(
+                                                  widget.cal_sub_name.id
+                                                      .toString(),
+                                                  year_name,
+                                                  _lights);
+
+                                      if (!error[0]) {
+                                        CAL_SUB_YEARS new_sub_year =
+                                            CAL_SUB_YEARS();
+                                        new_sub_year.id = error[1];
+                                        new_sub_year.yearName = year_name;
+                                        new_sub_year.private = _lights;
+                                        new_sub_year.username =
+                                            user_min(widget.app_user);
+                                        setState(() {
+                                          sub_years.add(new_sub_year);
+                                        });
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                            duration:
+                                                Duration(milliseconds: 400),
+                                            content: Text(
+                                              "error occured please try again",
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                    }
+                                  }
+                                },
+                                child: const Center(
+                                  child: Text("Add"),
+                                ))
+                          ]));
+                    });
+              },
+              label: const Text("Add new year",
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold)),
+              icon: const Icon(Icons.edit, color: Colors.white),
+              style: ElevatedButton.styleFrom(primary: Colors.deepPurple),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
   build_screen() {
-    var wid = MediaQuery.of(context).size.width;
+    var wid = 450.0;
     return loaded_data == false
         ? Center(
             child: Container(

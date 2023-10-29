@@ -23,48 +23,57 @@ class notifications extends StatefulWidget {
 class _notificationsState extends State<notifications> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          iconTheme: IconThemeData(color: Colors.black),
-          title: const Text(
-            "Announcements",
-            style: TextStyle(color: Colors.black),
-          ),
-          backgroundColor: Colors.white70,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 450.0,
+          child: Scaffold(
+              appBar: AppBar(
+                centerTitle: true,
+                iconTheme: IconThemeData(color: Colors.black),
+                title: const Text(
+                  "Announcements",
+                  style: TextStyle(color: Colors.black),
+                ),
+                backgroundColor: Colors.white70,
+              ),
+              body: FutureBuilder<List<Notifications>>(
+                future: app_notif_servers().get_notifications_list(),
+                builder: (ctx, AsyncSnapshot snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Text(
+                          '${snapshot.error} occurred',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      );
+                    } else if (snapshot.hasData) {
+                      List<Notifications> notif_list = snapshot.data;
+                      if (notif_list.length == 0) {
+                        return Container(
+                            margin: EdgeInsets.all(30),
+                            padding: EdgeInsets.all(30),
+                            child: const Center(
+                              child: Text("No Announcements yet",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 24)),
+                            ));
+                      } else {
+                        return notifications1(notif_list, widget.app_user);
+                      }
+                    }
+                  }
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+              )),
         ),
-        body: FutureBuilder<List<Notifications>>(
-          future: app_notif_servers().get_notifications_list(),
-          builder: (ctx, AsyncSnapshot snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasError) {
-                return Center(
-                  child: Text(
-                    '${snapshot.error} occurred',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                );
-              } else if (snapshot.hasData) {
-                List<Notifications> notif_list = snapshot.data;
-                if (notif_list.length == 0) {
-                  return Container(
-                      margin: EdgeInsets.all(30),
-                      padding: EdgeInsets.all(30),
-                      child: const Center(
-                        child: Text("No Announcements yet",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w500, fontSize: 24)),
-                      ));
-                } else {
-                  return notifications1(notif_list, widget.app_user);
-                }
-              }
-            }
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          },
-        ));
+      ],
+    );
   }
 }
 
@@ -80,7 +89,7 @@ class notifications1 extends StatefulWidget {
 class _notifications1State extends State<notifications1> {
   @override
   Widget build(BuildContext context) {
-    double wid = MediaQuery.of(context).size.width;
+    double wid = 450.0;
     return Container(
         width: wid, //foo1(img_file),
         height: MediaQuery.of(context).size.height,
@@ -100,7 +109,7 @@ class _notifications1State extends State<notifications1> {
   Widget _buildLoadingScreen(
       Notifications notif, List<Notifications> notif_list) {
     SmallUsername user = notif.username!;
-    var width = MediaQuery.of(context).size.width;
+    var width = 450.0;
     String delete_error = "";
     return GestureDetector(
       child: Container(
@@ -108,11 +117,10 @@ class _notifications1State extends State<notifications1> {
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(boxShadow: const [
             BoxShadow(
-              color: Colors.grey, 
-              offset:
-                  Offset(0, 2), 
-              blurRadius: 6, 
-              spreadRadius: 0, 
+              color: Colors.grey,
+              offset: Offset(0, 2),
+              blurRadius: 6,
+              spreadRadius: 0,
             ),
           ], color: Colors.white, borderRadius: BorderRadius.circular(5)),
           child: Column(

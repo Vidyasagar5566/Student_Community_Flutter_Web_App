@@ -35,10 +35,11 @@ class login_servers {
 //      if (username == "VidyaSagar") {
 //        return true;
       //     }
-      var path = Uri.parse("$base_url/login2");
+      var path = Uri.parse("$base_url/login2_token");
       var response = await http.post(path,
           headers: {
             "Content-Type": "application/json",
+            "Acces-Control_Allow_Origin": "*"
           },
           body: jsonEncode({
             'username': username,
@@ -46,6 +47,8 @@ class login_servers {
           }));
       var data = jsonDecode(response.body) as Map;
       if (data.containsKey('token')) {
+        storage.clear();
+        print(data['token']);
         storage.setItem('token', data['token']);
         return false;
       }
@@ -59,23 +62,14 @@ class login_servers {
 // GETTING USER CREDIDENTIALS // DELETE USER
   Future<Username> get_user(String email) async {
     try {
-      await Firebase.initializeApp();
-      String? FCM_token = await FirebaseMessaging.instance.getToken();
-      print(FCM_token);
-      String platform = "";
-      if (Platform.isAndroid) {
-        platform = "android";
-      } else {
-        platform = "ios";
-      }
+      String platform = "web";
 
       Map<String, String> queryParameters = {
-        'token': FCM_token!,
+        'token': 'FCM_token',
         'platform': platform,
         'email': email
       };
       String queryString = Uri(queryParameters: queryParameters).query;
-
       var token = storage.getItem('token');
       var url = Uri.parse("$base_url/get_user2?$queryString");
       http.Response response = await http.get(url, headers: {

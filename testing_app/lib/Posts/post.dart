@@ -83,50 +83,60 @@ class PostWithappBar extends StatefulWidget {
 class _PostWithappBarState extends State<PostWithappBar> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-            centerTitle: true,
-            title: Text(widget.domain, style: TextStyle(color: Colors.black)),
-            backgroundColor: Colors.white //indigoAccent[700],
-            ),
-        body: FutureBuilder<List<POST_LIST>>(
-          future:
-              post_servers().get_post_list(domains1[widget.domain]!, 0, true),
-          builder: (ctx, AsyncSnapshot snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasError) {
-                return Center(
-                  child: Text(
-                    '${snapshot.error} occurred',
-                    style: TextStyle(fontSize: 18),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 450.0,
+          child: Scaffold(
+              appBar: AppBar(
+                  centerTitle: true,
+                  title: Text(widget.domain,
+                      style: TextStyle(color: Colors.black)),
+                  backgroundColor: Colors.white //indigoAccent[700],
                   ),
-                );
-              } else if (snapshot.hasData) {
-                List<POST_LIST> post_list = snapshot.data;
-                if (post_list.length == 0) {
-                  return Container(
-                      margin: EdgeInsets.all(30),
-                      padding: EdgeInsets.all(30),
-                      child: const Center(
-                        child: Text("No posts yet",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w500, fontSize: 24)),
-                      ));
-                } else {
-                  all_posts = post_list;
-                  return appBarPostList(
-                      post_list, widget.app_user, widget.domain, true);
-                }
-              }
-            }
-            return Center(
-              child: Container(
-                  margin: EdgeInsets.all(50),
-                  padding: EdgeInsets.all(50),
-                  child: CircularProgressIndicator()),
-            );
-          },
-        ));
+              body: FutureBuilder<List<POST_LIST>>(
+                future: post_servers()
+                    .get_post_list(domains1[widget.domain]!, 0, true),
+                builder: (ctx, AsyncSnapshot snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Text(
+                          '${snapshot.error} occurred',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      );
+                    } else if (snapshot.hasData) {
+                      List<POST_LIST> post_list = snapshot.data;
+                      if (post_list.length == 0) {
+                        return Container(
+                            margin: EdgeInsets.all(30),
+                            padding: EdgeInsets.all(30),
+                            child: const Center(
+                              child: Text("No posts yet",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 24)),
+                            ));
+                      } else {
+                        all_posts = post_list;
+                        return appBarPostList(
+                            post_list, widget.app_user, widget.domain, true);
+                      }
+                    }
+                  }
+                  return Center(
+                    child: Container(
+                        margin: EdgeInsets.all(50),
+                        padding: EdgeInsets.all(50),
+                        child: CircularProgressIndicator()),
+                  );
+                },
+              )),
+        ),
+      ],
+    );
   }
 }
 
@@ -169,7 +179,7 @@ class _postwidget1State extends State<postwidget1> {
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
+    var width = 450.0;
     var height = MediaQuery.of(context).size.height;
     return Container(
       child: SingleChildScrollView(
@@ -269,7 +279,7 @@ class _appBarPostListState extends State<appBarPostList> {
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
+    var width = 450.0;
     var height = MediaQuery.of(context).size.height;
     return Container(
       child: SingleChildScrollView(
@@ -366,7 +376,7 @@ class _single_postState extends State<single_post> {
   Widget build(BuildContext context) {
     POST_LIST post = widget.post;
     SmallUsername user = post.username!;
-    var width = MediaQuery.of(context).size.width;
+    var width = 450.0;
     return Container(
       margin: EdgeInsets.only(top: 5),
       padding: const EdgeInsets.only(top: 5, bottom: 3, left: 2, right: 2),
@@ -389,18 +399,6 @@ class _single_postState extends State<single_post> {
               post.category == 'student'
                   ? UserProfileMark(widget.app_user, post.username!)
                   : UserProfileMarkAdmin(post, post.username, widget.app_user),
-              // Container(
-              //   constraints: BoxConstraints(
-              //     maxWidth: width * 0.25,
-              //   ),
-              //   child: Text(widget.post_posted_date,
-              //       maxLines: 3,
-              //       overflow: TextOverflow.ellipsis,
-              //       style: const TextStyle(
-              //           fontSize: 14,
-              //           color: Colors.black,
-              //           fontWeight: FontWeight.bold)),
-              // ),
               IconButton(
                 onPressed: () {
                   showDialog(
@@ -604,6 +602,8 @@ class _single_postState extends State<single_post> {
             height: 5,
           ),
           Container(
+            // height: width,
+            // width: width,
             decoration: post.imgRatio == 1
                 ? BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
@@ -682,6 +682,7 @@ class _single_postState extends State<single_post> {
                                 image: DecorationImage(
                                     image: NetworkImage(post.img!),
                                     fit: BoxFit.cover)),
+                            // child: Image.network(post.img!),
                           ),
                         )
                       : post.imgRatio == 2
@@ -873,42 +874,47 @@ class commentwidget extends StatefulWidget {
 class _commentwidgetState extends State<commentwidget> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          leading: const BackButton(
-            color: Colors.blue, // <-- SEE HERE
-          ),
-          title: const Text(
-            "comments",
-            style: TextStyle(color: Colors.black),
-          ),
-          backgroundColor: Colors.white70,
-        ),
-        body: FutureBuilder<List<PST_CMNT>>(
-          future: post_servers().get_post_cmnt_list(widget.post.id!),
-          builder: (ctx, AsyncSnapshot snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasError) {
-                return Center(
-                  child: Text(
-                    '${snapshot.error} occurred',
-                    style: TextStyle(fontSize: 18),
+    return Center(
+      child: SizedBox(
+        width: 450.0,
+        child: Scaffold(
+            appBar: AppBar(
+              leading: const BackButton(
+                color: Colors.blue, // <-- SEE HERE
+              ),
+              title: const Text(
+                "comments",
+                style: TextStyle(color: Colors.black),
+              ),
+              backgroundColor: Colors.white70,
+            ),
+            body: FutureBuilder<List<PST_CMNT>>(
+              future: post_servers().get_post_cmnt_list(widget.post.id!),
+              builder: (ctx, AsyncSnapshot snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        '${snapshot.error} occurred',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    );
+                  } else if (snapshot.hasData) {
+                    List<PST_CMNT> pst_cmnt_list = snapshot.data;
+                    return commentwidget1(
+                        pst_cmnt_list, widget.app_user, widget.post);
+                  }
+                }
+                return Container(
+                  color: Colors.white,
+                  child: const Center(
+                    child: CircularProgressIndicator(),
                   ),
                 );
-              } else if (snapshot.hasData) {
-                List<PST_CMNT> pst_cmnt_list = snapshot.data;
-                return commentwidget1(
-                    pst_cmnt_list, widget.app_user, widget.post);
-              }
-            }
-            return Container(
-              color: Colors.white,
-              child: const Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          },
-        ));
+              },
+            )),
+      ),
+    );
   }
 }
 
@@ -929,7 +935,7 @@ class _commentwidget1State extends State<commentwidget1> {
   @override
   Widget build(BuildContext context) {
     List<PST_CMNT> pst_cmnt_list = widget.pst_cmnt_list;
-    var width = MediaQuery.of(context).size.width;
+    var width = 450.0;
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -941,7 +947,7 @@ class _commentwidget1State extends State<commentwidget1> {
               end: Alignment.bottomRight,
             )),
             height: MediaQuery.of(context).size.height - 200,
-            width: MediaQuery.of(context).size.width,
+            width: 450.0,
             child: SingleChildScrollView(
               reverse: true,
               child: ListView.builder(
@@ -1102,6 +1108,7 @@ class _commentwidget1State extends State<commentwidget1> {
     String delete_error = "";
     SmallUsername user = pst_cmnt.username!;
     return Container(
+        width: 440.0,
         margin: const EdgeInsets.only(top: 5, left: 5, right: 5),
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
@@ -1217,7 +1224,7 @@ class _commentwidget1State extends State<commentwidget1> {
                   style: TextStyle(fontWeight: FontWeight.w500),
                 ),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width - 150,
+                  width: 450 - 150,
                   child: Text(pst_cmnt.insertMessage!
                           ? pst_cmnt.comment!
                           : utf8convert(pst_cmnt.comment!)

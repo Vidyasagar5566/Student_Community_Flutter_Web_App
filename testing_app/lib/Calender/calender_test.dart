@@ -119,8 +119,6 @@ class _calenderwidget1State extends State<calenderwidget1> {
 
   @override
   Widget build(BuildContext context) {
-    var wid = MediaQuery.of(context).size.width;
-
     return DefaultTabController(
         length: 10,
         child: Column(
@@ -251,7 +249,7 @@ class allEvents extends StatefulWidget {
 class _allEventsState extends State<allEvents> {
   @override
   Widget build(BuildContext context) {
-    var wid = MediaQuery.of(context).size.width;
+    var wid = 450.0;
     event_filter_from_today(widget.selected_today);
     return filter_all_dates.length == 0
         ? Container(
@@ -395,7 +393,7 @@ class dailyTimeTable extends StatefulWidget {
 class _dailyTimeTableState extends State<dailyTimeTable> {
   @override
   Widget build(BuildContext context) {
-    var wid = MediaQuery.of(context).size.width;
+    var wid = 450.0;
     event_filter_from_today(widget.selected_today);
     return filter_all_dates.length == 0
         ? Container(
@@ -734,7 +732,7 @@ class _TimetablesState extends State<Timetables> {
   @override
   Widget build(BuildContext context) {
     List<String> class_slots = widget.batch_list.split('#');
-    var width = MediaQuery.of(context).size.width;
+    var width = 450.0;
     var height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
@@ -955,7 +953,7 @@ class _edit_timetableState extends State<edit_timetable> {
           backgroundColor: Colors.white70,
         ),
         body: Container(
-          width: MediaQuery.of(context).size.width,
+          width: 450.0,
           height: MediaQuery.of(context).size.height,
           decoration: const BoxDecoration(
             image: DecorationImage(
